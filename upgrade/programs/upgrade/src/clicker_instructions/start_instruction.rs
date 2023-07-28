@@ -9,7 +9,7 @@ use crate::clicker_globals::constants::CLICKER_SEED;
 pub struct Start<'info>{
     #[account(
         init,
-        seeds = [CLICKER_SEED, player.key().as_ref(), game.key().as_ref()],
+        seeds = [CLICKER_SEED, game.key().as_ref(), player.key().as_ref()],
         bump,
         payer = player,
         space = std::mem::size_of::<Clicker>() + 8,
