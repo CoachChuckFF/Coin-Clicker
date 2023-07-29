@@ -13,7 +13,7 @@ pub struct Submit<'info>{
 
     #[account(
         mut,
-        close = player,
+        close = owner,
         has_one = player,
         has_one = game,
         has_one = owner,

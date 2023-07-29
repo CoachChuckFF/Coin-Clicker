@@ -193,6 +193,31 @@ export async function withdrawClickerAccount(
     return fetchClickerAccount(program, clickerKey);
 }
 
+export async function submitClickerAccount(
+    wallet: AnchorWallet, 
+    player: Keypair, 
+    program: Program<Upgrade>, 
+    clickerKey?: PublicKey,
+){
+
+    if (!program) throw new Error("Needs a program");
+
+    clickerKey = clickerKey ?? getClickerKey(program, player.publicKey);
+
+    const ix = await program.methods.submit()
+    .accounts({
+        game: CLICKER_GAME_KEY,
+        clicker: clickerKey,
+        player: player.publicKey,
+        owner: wallet.publicKey,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([player])
+      .instruction();
+
+    await sendAndConfirmIx(wallet, player, program.provider.connection, ix);
+}
+
 export async function clickClickerAccount(player: Keypair, program: Program<Upgrade>, clickerKey?: PublicKey){
 
     if (!program) throw new Error("Needs a program");

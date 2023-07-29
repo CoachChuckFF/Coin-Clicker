@@ -5,6 +5,12 @@ module.exports = {
   content: [],
   theme: {
     extend: {
+      backdropFilter: {
+        'none': 'none',
+        'blur': 'blur(20px)',
+      },
+    },
+    extend: {
       colors: {
         'solana-black': '#1B1917',
         'solana-dark': '#292524',
@@ -14,7 +20,12 @@ module.exports = {
         'solana-red': '#CE4A5C',
         'solana-purple': '#9A45FF'
       }
-    }
+    },
+    variants: {
+      extend: {
+        backdropFilter: ['hover', 'focus'],
+      },
+    },
   },
   plugins: [],
 }

@@ -2,7 +2,7 @@ import { AnchorWallet } from '@solana/wallet-adapter-react';
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import { Program, AnchorProvider, BN } from "@coral-xyz/anchor";
 import { StateCreator, create } from 'zustand';
-import { CLICKER_PROGRAM_ID, ClickerStruct, GameStruct, clickClickerAccount, depositClickerAccount, fetchClickerAccount, fetchGameAccount, getClickerKey, getClickerProgram, getClickerTokenKey, upgradeClickerAccount, withdrawClickerAccount } from '../controllers/clickerProgram';
+import { CLICKER_GAME_KEY, CLICKER_PROGRAM_ID, ClickerStruct, GameStruct, clickClickerAccount, depositClickerAccount, fetchClickerAccount, fetchGameAccount, getClickerKey, getClickerProgram, getClickerTokenKey, submitClickerAccount, upgradeClickerAccount, withdrawClickerAccount } from '../controllers/clickerProgram';
 import { IDL, Upgrade } from '../controllers/idl/upgrade';
 import { grabLocalKeypair } from '../controllers/storage';
 
@@ -12,11 +12,17 @@ export type CombinedState = AppSlice;
 export interface AppSlice {
     publicKey: PublicKey | null;    
     wallet: AnchorWallet | null;
-    walletListener: number | null;
     connection: Connection | null;
-    balance: number | null;
     setState: (wallet: AnchorWallet, connection: Connection) => void;
     clearState: () => void;
+
+    // ---- WALLET STUFF -----
+    walletListener: number | null;
+    walletBalance: number | null,
+    tokenListener: number | null,
+    tokenBalance: number | null,
+    playerListener: number | null,
+    playerBalance: number | null,
 
     // ---- CLICKER STUFF -----
     clickerProgram: Program<Upgrade> | null;
@@ -28,10 +34,9 @@ export interface AppSlice {
 
     // ---- GAME STUFF -----
     playerKeypair: Keypair | null;
-    // newKeypair: () => void;
     gameWithdraw: () => void;
     gameDeposit: () => void;
-    // gameSubmit: () => void;
+    gameSubmit: () => void;
     gameAccount: GameStruct | null;
 
     // ---- Toast -----
@@ -56,9 +61,21 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
         );
         const clickerTokenKey = getClickerTokenKey(wallet.publicKey);
 
-        const walletListener = connection.onAccountChange(playerKeypair.publicKey, (walletAccount) => {
+        const walletListener = connection.onAccountChange(wallet.publicKey, (walletAccount) => {
             set({
-                balance: walletAccount.lamports / LAMPORTS_PER_SOL,
+                walletBalance: walletAccount.lamports / LAMPORTS_PER_SOL,
+            });
+        })
+
+        const tokenListener = connection.onAccountChange(wallet.publicKey, (walletAccount) => {
+            set({
+                tokenBalance: walletAccount.lamports / LAMPORTS_PER_SOL,
+            });
+        })
+
+        const playerListener = connection.onAccountChange(playerKeypair.publicKey, (walletAccount) => {
+            set({
+                playerBalance: walletAccount.lamports / LAMPORTS_PER_SOL,
             });
         })
 
@@ -70,17 +87,30 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
             clickerProgram,
             clickerKey,
             clickerTokenKey,
-            walletListener
+            walletListener,
+            tokenListener,
+            playerListener
         });
 
         // ------ ASYNC STUFF ------
         connection.getBalance(wallet.publicKey).then((balance) => {
             set({
-                balance: balance / LAMPORTS_PER_SOL,
+                walletBalance: balance / LAMPORTS_PER_SOL,
             });
         }).catch((err) => {
             set({
-                balance: null,
+                walletBalance: null,
+            });
+            console.log(`Error getting balance [${err}]`);
+        })
+
+        connection.getBalance(playerKeypair.publicKey).then((balance) => {
+            set({
+                playerBalance: balance / LAMPORTS_PER_SOL,
+            });
+        }).catch((err) => {
+            set({
+                playerBalance: null,
             });
             console.log(`Error getting balance [${err}]`);
         })
@@ -120,8 +150,14 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
             wallet: null,
             connection: null,
             publicKey: null,
+
             walletListener: null,
-            balance: null,
+            walletBalance: null,
+            playerListener: null,
+            playerBalance: null,
+            tokenListener: null,
+            tokenBalance: null,
+
             clickerKey: null,
             clickerProgram: null,
             clickerAccount: null,
@@ -205,6 +241,44 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
         }
     }
 
+    const gameSubmit = () => {
+        const { 
+            clickerProgram,
+            clickerKey,
+            wallet,
+            isLoading,
+            playerKeypair: gameKeypair
+        } = get();
+
+        if(clickerProgram && clickerKey && wallet && gameKeypair && !isLoading){
+            set({isLoading: true,})
+
+            submitClickerAccount(wallet, gameKeypair, clickerProgram, clickerKey).then(() => {
+
+                clickerProgram.account.game.fetch(CLICKER_GAME_KEY).then((gameAccount)=>{
+                    set({
+                        gameAccount
+                    })
+                })
+
+                set({
+                    clickerAccount : null,
+                    toastSuccess: 'Submitted!',
+                })
+            }).catch((e)=>{
+            console.log(`${e}`)
+
+                set({
+                    toastError: `Error submitting: ${e}`,
+                })
+            }).finally(()=>{
+
+                set({isLoading: false,})
+            })
+        }
+    }
+
+
     const clickerClick = () => {
         const { 
             clickerProgram,
@@ -261,10 +335,15 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
         publicKey: null,
         wallet: null,
         connection: null,
-        balance: null,
-        walletListener: null,
         setState,
         clearState,
+
+        walletListener: null,
+        walletBalance: null,
+        playerListener: null,
+        playerBalance: null,
+        tokenListener: null,
+        tokenBalance: null,
 
         clickerProgram: null,
         clickerKey: null,
@@ -276,6 +355,7 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
         clickerUpgrade,
         gameDeposit,
         gameWithdraw,
+        gameSubmit,
         clearToast,
         isLoading: false,
         toastMessage: null,
