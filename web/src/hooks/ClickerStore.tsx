@@ -5,9 +5,11 @@ import { StateCreator, create } from 'zustand';
 import { CLICKER_GAME_KEY, CLICKER_PROGRAM_ID, ClickerStruct, GameStruct, clickClickerAccount, depositClickerAccount, fetchClickerAccount, fetchGameAccount, getClickerKey, getClickerProgram, getClickerTokenKey, submitClickerAccount, upgradeClickerAccount, withdrawClickerAccount } from '../controllers/clickerProgram';
 import { IDL, Upgrade } from '../controllers/idl/upgrade';
 import { grabLocalKeypair } from '../controllers/storage';
+import { TerminalColor, TerminalEntry } from '../models/terminal';
+import { UPGRADES } from '../models/upgrades';
+import { formatNumber } from '../controllers/helpers';
 
 export type CombinedState = AppSlice;
-
 
 export interface AppSlice {
     publicKey: PublicKey | null;    
@@ -40,12 +42,8 @@ export interface AppSlice {
     gameAccount: GameStruct | null;
 
     // ---- Toast -----
-    clearToast: () => void;
     isLoading: boolean;
-    toastMessage: string | null;
-    toastError: string | null;
-    toastSuccess: string | null;
-
+    lastTerminalEntry: TerminalEntry | null;
 }
 
 export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> = (set, get) => {
@@ -164,18 +162,8 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
             clickerTokenKey: null,
             playerKeypair: null,
             gameAccount: null,
-            toastError: null,
-            toastMessage: null,
-            toastSuccess: null,
+            lastTerminalEntry: null,
             isLoading: false,
-        });
-    }
-
-    const clearToast = () => {
-        set({
-            toastError: null,
-            toastMessage: null,
-            toastSuccess: null,
         });
     }
 
@@ -195,13 +183,22 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
 
                 set({
                     clickerAccount,
-                    toastSuccess: 'Clicker account created!',
+                    lastTerminalEntry: {
+                        type: TerminalColor.system,
+                        timestamp: Date.now(),
+                        message:'Game on! Your Clicker account is now ready to go!',
+                    }
+
                 })
             }).catch((e)=>{
             console.log(`${e}`)
 
                 set({
-                    toastError: `Error creating: ${e}`,
+                    lastTerminalEntry: {
+                        type: TerminalColor.error,
+                        timestamp: Date.now(),
+                        message:`Error dpositing into your Clicker account ( ${e} )`,
+                    }
                 })
             }).finally(()=>{
 
@@ -223,17 +220,25 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
             set({isLoading: true,})
 
             withdrawClickerAccount(wallet, gameKeypair, clickerProgram, clickerKey).then((clickerAccount) => {
-
                 set({
-                    clickerAccount,
-                    toastSuccess: 'Clicker account created!',
+                    clickerAccount: null,
+                    lastTerminalEntry: {
+                        type: TerminalColor.system,
+                        timestamp: Date.now(),
+                        message:'Your Coins are now safe in your wallet! Just re-deposit to keep',
+                    }
+
                 })
             }).catch((e)=>{
             console.log(`${e}`)
 
-                set({
-                    toastError: `Error creating: ${e}`,
-                })
+            set({
+                lastTerminalEntry: {
+                    type: TerminalColor.error,
+                    timestamp: Date.now(),
+                    message:`Error withdrawing from your Clicker account ( ${e} )`,
+                }
+            })
             }).finally(()=>{
 
                 set({isLoading: false,})
@@ -262,15 +267,24 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
                 })
 
                 set({
-                    clickerAccount : null,
-                    toastSuccess: 'Submitted!',
+                    clickerAccount: null,
+                    lastTerminalEntry: {
+                        type: TerminalColor.system,
+                        timestamp: Date.now(),
+                        message:'You have submitted your Coins to the leaderboard! Good job! Note - this means your account no logner exists - think of it like prestiging',
+                    }
+
                 })
             }).catch((e)=>{
             console.log(`${e}`)
 
-                set({
-                    toastError: `Error submitting: ${e}`,
-                })
+            set({
+                lastTerminalEntry: {
+                    type: TerminalColor.error,
+                    timestamp: Date.now(),
+                    message:`Error submitting to leaderboard ( ${e} )`,
+                }
+            })
             }).finally(()=>{
 
                 set({isLoading: false,})
@@ -290,14 +304,26 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
 
         if(clickerProgram && clickerAccount && gameKeypair && clickerKey && !isLoading){
             set({isLoading: true,})
-            clickClickerAccount(gameKeypair, clickerProgram, clickerKey).then((clickerAccount) => {
+            clickClickerAccount(gameKeypair, clickerProgram, clickerKey).then((newClickerAccount) => {
+
+                const lastCoins = clickerAccount.points.toNumber();
+
                 set({
-                    clickerAccount,
-                    toastMessage: `Clicked! ${clickerAccount.points.toNumber()}`,
+                    clickerAccount: newClickerAccount,
+                    lastTerminalEntry: {
+                        type: TerminalColor.normal,
+                        timestamp: Date.now(),
+                        message:`+${formatNumber(newClickerAccount.points.toNumber() - lastCoins)} coin(s)`,
+                    }
+
                 })
             }).catch((e)=>{
                 set({
-                    toastError: `Error clicking: ${e}`,
+                    lastTerminalEntry: {
+                        type: TerminalColor.error,
+                        timestamp: Date.now(),
+                        message:`Error clicking! ( ${e} )`,
+                    }
                 })
             }).finally(()=>{
                 set({isLoading: false,})
@@ -319,11 +345,21 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
             upgradeClickerAccount(upgrade, amount, wallet, gameKeypair, clickerProgram, clickerKey).then((clickerAccount) => {
                 set({
                     clickerAccount,
-                    toastMessage: `Upgraded!`,
+                    lastTerminalEntry: {
+                        type: TerminalColor.normal,
+                        timestamp: Date.now(),
+                        message:`+1 ${UPGRADES[upgrade].name} +${UPGRADES[upgrade].coinPerUpgrade} CpS`,
+                    }
+
                 })
             }).catch((e)=>{
+
                 set({
-                    toastError: `Error upgrading: ${e}`,
+                    lastTerminalEntry: {
+                        type: TerminalColor.error,
+                        timestamp: Date.now(),
+                        message:`Error Upgrading! ( ${e} )`,
+                    }
                 })
             }).finally(()=>{
                 set({isLoading: false,})
@@ -356,11 +392,8 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
         gameDeposit,
         gameWithdraw,
         gameSubmit,
-        clearToast,
         isLoading: false,
-        toastMessage: null,
-        toastError: null,
-        toastSuccess: null,
+        lastTerminalEntry: null,
     }
 }
 

@@ -17,6 +17,7 @@ module.exports = {
         'solana-light': '#FFFFFF',
         'solana-green': '#16F195',
         'solana-blue': '#4AAACE',
+        'solana-blue-pressed': '#2D687F',
         'solana-red': '#CE4A5C',
         'solana-purple': '#9A45FF'
       }

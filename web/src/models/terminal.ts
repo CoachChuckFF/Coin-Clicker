@@ -11,27 +11,40 @@ export interface TerminalEntry {
     timestamp: number, // will be filled with Date.now()
 }
 
-const LONG_STRING = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque accumsan urna vitae justo malesuada, a commodo justo finibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum a diam semper, faucibus erat a, semper arcu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent posuere, lorem a aliquet dapibus, diam mauris fringilla magna, sit amet facilisis mi sapien at est. Fusce nec tincidunt est. Fusce tincidunt convallis nisl, sed aliquam urna feugiat sed. Cras non facilisis erat. Nulla facilisi. Aenean vulputate dapibus felis, a consequat enim eleifend id. Curabitur lacinia ligula nec dapibus iaculis. Nullam vel congue est, ac malesuada libero.";
-export const DUMMY_ENTRIES = [
+export const STARTING_ENTRIES = [
     {
-        type: TerminalColor.error,
-        message: 'Error message',
-        timestamp: Date.now(),
-    },
-    {
-        type: TerminalColor.normal,
-        message: 'Normal message',
-        timestamp: Date.now(),
-    },
-    {
-        type: TerminalColor.normal,
-        message: LONG_STRING,
+        type: TerminalColor.system,
+        message: 'Hello There!',
         timestamp: Date.now(),
     },
     {
         type: TerminalColor.system,
-        message: 'System message',
+        message: 'Welcome to Coach\'s Coin Clicker! Let\'s get started!',
         timestamp: Date.now(),
     },
-    // ... more entries
+    {
+        type: TerminalColor.system,
+        message: '1. Deposit 0.01 sol into the Player Wallet ( by clicking Deposit Above )',
+        timestamp: Date.now(),
+    },
+    {
+        type: TerminalColor.system,
+        message: '2. Click the coin, and buy upgrades',
+        timestamp: Date.now(),
+    },
+    {
+        type: TerminalColor.system,
+        message: '3a. Withdraw your coins to play again later ( You\'ll get real Coin tokens! )',
+        timestamp: Date.now(),
+    },
+    {
+        type: TerminalColor.system,
+        message: '3b. Submit your coins to the leaderboard! ( And be famous! )',
+        timestamp: Date.now(),
+    },
+    {
+        type: TerminalColor.system,
+        message: 'Note: Have fun! Love, Coach Chuck!',
+        timestamp: Date.now(),
+    },
 ];

@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::clicker_accounts::clicker_account::Clicker;
-use crate::clicker_globals::constants::{BASE_COSTS, BASE_POINTS, CLICKER_SEED};
+use crate::clicker_globals::constants::{BASE_COSTS, BASE_POINTS};
 use crate::clicker_globals::errors::CodeErrors;
 use crate::clicker_globals::helpers::get_upgrade_cost;
 
@@ -19,7 +19,6 @@ pub struct Upgrade<'info>{
 
 pub fn run_upgrade(ctx: Context<Upgrade>, upgrade_index: u8, amount: u8) -> Result<()> {
     let clicker = &mut ctx.accounts.clicker;
-    let now = Clock::get()?.unix_timestamp;
 
     if amount == 0 {
         return Err(error!(CodeErrors::NotAValidAmount));
@@ -42,10 +41,6 @@ pub fn run_upgrade(ctx: Context<Upgrade>, upgrade_index: u8, amount: u8) -> Resu
 
         clicker.points -= cost;
         clicker.clicker_upgrades[upgrade_index as usize] += amount as u16;
-    }
-
-    {
-        clicker.last_updated = now
     }
 
     Ok(())

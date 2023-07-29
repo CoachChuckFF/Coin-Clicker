@@ -91,11 +91,8 @@ pub fn run_deposit(ctx: Context<Deposit>) -> Result<()> {
             clicker.clicker_modifiers = [0; 16];
             clicker.clicker_upgrades = [0; 16];
             clicker.date_created = now;
-        } else {
-            clicker.points = clicker.points.saturating_add(amount_to_burn.saturating_add(1));
+            clicker.last_updated = now;
         }
-    
-        clicker.last_updated = now;
     }
 
 

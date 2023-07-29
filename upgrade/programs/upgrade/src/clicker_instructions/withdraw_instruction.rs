@@ -77,7 +77,6 @@ pub fn run_withdraw(ctx: Context<Withdraw>) -> Result<()> {
     {
         let clicker = &mut ctx.accounts.clicker;
 
-        clicker.last_updated = Clock::get()?.unix_timestamp;
         clicker.points = 0;
     }
 

@@ -61,39 +61,21 @@ async function sendAndConfirmIx(wallet: AnchorWallet, player: Keypair, connectio
     ).blockhash;
     tx.feePayer = wallet.publicKey;
     
-    console.log("Signing")
-
     tx.partialSign(player);
     const sigTx = await wallet.signTransaction(tx);
     const rawTransaction = sigTx.serialize({ requireAllSignatures: false });
 
-    let txSig = '';
-    console.log("Sending")
-    try{
-        txSig = await connection.sendRawTransaction(rawTransaction, { skipPreflight: true });
-
-    } catch (e){
-        console.log(`Sending Error ${e}`)
-    }
-
-
+    const txSig = await connection.sendRawTransaction(rawTransaction, { skipPreflight: true });
     const latestBlockHash = await connection.getLatestBlockhash();
+    const result = await connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: txSig,
+    })  
 
-    console.log("Checking")
-
-
-    try {
-        await connection.confirmTransaction({
-            blockhash: latestBlockHash.blockhash,
-            lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-            signature: txSig,
-        })  
-    } catch(e){
-        console.log(`Confirm Error ${e}`)
+    if(result.value.err){
+        throw new Error(JSON.stringify(result.value.err))
     }
-
-
-    console.log("Done")
 
     return txSig
   }
@@ -116,11 +98,15 @@ async function sendAndConfirmIx(wallet: AnchorWallet, player: Keypair, connectio
 
     const latestBlockHash = await connection.getLatestBlockhash();
 
-    await connection.confirmTransaction({
+    const result = await connection.confirmTransaction({
         blockhash: latestBlockHash.blockhash,
         lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
         signature: txSig,
     })  
+
+    if(result.value.err){
+        throw new Error(JSON.stringify(result.value.err))
+    }
 
     return txSig
   }
