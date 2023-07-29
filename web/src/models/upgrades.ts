@@ -12,19 +12,19 @@ export interface UpgradeType {
 
 export const UPGRADES: UpgradeType[] = [
     {
-        name: "TAT",
+        name: "Sea Rovers",
         description: "",
-        image: "https://cdn.valhallalabs.xyz/ape/7907.png?ext=png",
+        image: "https://arweave.net/htWyvQeoaciETL3n1BZE8xWV-hhWnY-4znXhk2ZsfAo",
     
         upgradeIndex: 0,
         baseCost: 15,
         coinPerUpgrade: 1,
     },
     {
-        name: "Friendly Frogs",
+        name: "Fractals",
         description: "",
-        image: "https://www.arweave.net/pEcxL2CgQ9GwBLcxQj0RYa-bIQnUbZVlnRz1Oxgz2Gc?ext=png",
-    
+        image: "https://storage.googleapis.com/fractal-launchpad-public-assets/fractals/img/hexa_010.jpg",
+
         upgradeIndex: 1,
         baseCost: 100,
         coinPerUpgrade: 3,
@@ -39,45 +39,47 @@ export const UPGRADES: UpgradeType[] = [
         coinPerUpgrade: 8,
     },
     {
-        name: "Claynos",
+        name: "Shadowy Super Coder",
         description: "",
-        image: "https://nftstorage.link/ipfs/bafybeiacpd6pdpa2bpzm62kr3gtyvv7zyujv7fz63qyjporqwzbfgtfimm/4091.png",
+        image: "https://shdw-drive.genesysgo.net/8yHTE5Cz3hwcTdghynB2jgLuvKyRgKEz2n5XvSiXQabG/3779.png",
+    
     
         upgradeIndex: 3,
         baseCost: 12_000,
         coinPerUpgrade: 47,
     },
     {
-        name: "Sol Slices",
+
+        name: "NEC",
         description: "",
-        image: "https://arweave.net/jh0zt1_LCkvhGWlzhDBArV1HoRhCQ-i9_FOtoN4zVVI?ext=png",
+        image: "https://shdw-drive.genesysgo.net/GWVKh2BgSu5ska9ADqhwfsjUrd23wHwNcg4if54NBJv/Crash%20Dummy.png",
     
         upgradeIndex: 4,
         baseCost: 130_000,
         coinPerUpgrade: 260,
     },
     {
-        name: "NEC",
+        name: "Claynos",
         description: "",
-        image: "https://shdw-drive.genesysgo.net/GWVKh2BgSu5ska9ADqhwfsjUrd23wHwNcg4if54NBJv/Crash%20Dummy.png",
+        image: "https://nftstorage.link/ipfs/bafybeiacpd6pdpa2bpzm62kr3gtyvv7zyujv7fz63qyjporqwzbfgtfimm/4091.png",
     
         upgradeIndex: 5,
         baseCost: 1_400_000,
         coinPerUpgrade: 1400,
     },
     {
-        name: "Fractals",
+        name: "Dronies",
         description: "",
-        image: "https://storage.googleapis.com/fractal-launchpad-public-assets/fractals/img/hexa_010.jpg",
+        image: "https://www.arweave.net/hurymaNA8AyoTUk_WS0iO5cxLs6kM1ZRneC29Xo-MRE?ext=png",
     
         upgradeIndex: 6,
         baseCost: 20_000_000,
         coinPerUpgrade: 7800,
     },
     {
-        name: "Dronies",
+        name: "Coach",
         description: "",
-        image: "https://www.arweave.net/hurymaNA8AyoTUk_WS0iO5cxLs6kM1ZRneC29Xo-MRE?ext=png",
+        image: "https://arweave.net/jh0zt1_LCkvhGWlzhDBArV1HoRhCQ-i9_FOtoN4zVVI?ext=png",
     
         upgradeIndex: 7,
         baseCost: 330_000_000,
