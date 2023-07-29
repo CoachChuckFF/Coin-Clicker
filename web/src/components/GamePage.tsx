@@ -1,7 +1,6 @@
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import React, { useEffect, useState } from 'react';
 import { useAppState } from '../hooks/ClickerStore';
-import { createClickerAccount } from '../controllers/clickerProgram';
 import { toast } from 'react-toastify';
 import { GameButton } from './Button';
 
@@ -11,7 +10,7 @@ function GamePage() {
         setShakeImage(true);
         setTimeout(() => setShakeImage(false), 1000); // reset after 1s
     };
-    const { clickerKey, clickerAccount, isLoading, clickerCreate, clickerClick, clearToast, clickerUpgrade, balance, toastMessage, toastError, toastSuccess } = useAppState();
+    const { clickerKey, clickerAccount, isLoading, gameWithdraw, gameDeposit, clickerClick, clearToast, clickerUpgrade, balance, toastMessage, toastError, toastSuccess } = useAppState();
 
     useEffect(() => {
         if(toastSuccess){
@@ -30,9 +29,17 @@ function GamePage() {
 
     }, [toastError]);
 
+    const handleDeposite = async () => {
+        if(clickerKey && !clickerAccount){
+            gameDeposit();
+        } else {
+            clickerClick();
+        }
+    }
+
     const handleClick = async () => {
         if(clickerKey && !clickerAccount){
-            clickerCreate();
+            gameDeposit();
         } else {
             clickerClick();
         }
@@ -40,17 +47,17 @@ function GamePage() {
 
     const handleUpgrade = async () => {
         if(clickerKey && !clickerAccount){
-            clickerCreate();
+            gameDeposit();
         } else {
-            clickerUpgrade(0x01);
+            clickerUpgrade(0x00);
         }
     }
 
-    const handleAuto = async () => {
+    const handleWithdraw = async () => {
         if(clickerKey && !clickerAccount){
-            clickerCreate();
+            gameDeposit();
         } else {
-            clickerUpgrade(0x02);
+            gameWithdraw();
         }
     }
 
@@ -61,7 +68,7 @@ function GamePage() {
             <>
                 <p>Points {clickerAccount.points.toString()}</p>
                 <p>PPC {(clickerAccount.clickerUpgrades[0] + 1).toString()}</p>
-                <p>PPS {clickerAccount.clickerUpgrades[9].toString()}</p>
+                <p>PPS {clickerAccount.clickerUpgrades[1].toString()}</p>
             </>
         )
     }
@@ -70,9 +77,10 @@ function GamePage() {
         <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
             <div>
                 <WalletMultiButton />
+                <GameButton onClick={handleDeposite} text='Deposite'/>
                 <GameButton onClick={handleClick} text='Click'/>
-                <GameButton onClick={handleUpgrade} text='+ 1 Clicker'/>
-                <GameButton onClick={handleAuto} text='+ 1 Auto'/>
+                <GameButton onClick={handleUpgrade} text='Upgrade'/>
+                <GameButton onClick={handleWithdraw} text='Withdraw'/>
                 <p>{balance}</p>
                 {renderClickerInfo()}
                 <img 

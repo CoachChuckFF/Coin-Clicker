@@ -10,6 +10,7 @@ export function grabLocalKeypair(publicKey: PublicKey){
     let gameKeypair: Keypair;
     const rawLocalKeypair = localStorage.getItem(getLocalKeypairIndex(publicKey));
     try {
+        if(!rawLocalKeypair) throw Error('No Keypair');
         console.log(`Found keypair, loading...`);
         gameKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(rawLocalKeypair as string)));
     } catch(e){

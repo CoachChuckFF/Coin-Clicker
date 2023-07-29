@@ -44,37 +44,6 @@
       ]
     },
     {
-      "name": "start",
-      "accounts": [
-        {
-          "name": "clicker",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "game",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "player",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "click",
       "accounts": [
         {
@@ -134,7 +103,7 @@
           "isSigner": false
         },
         {
-          "name": "playerVault",
+          "name": "ownerVault",
           "isMut": true,
           "isSigner": false
         },
@@ -160,6 +129,11 @@
         },
         {
           "name": "player",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "owner",
           "isMut": true,
           "isSigner": true
         }
@@ -185,7 +159,7 @@
           "isSigner": false
         },
         {
-          "name": "playerVault",
+          "name": "ownerVault",
           "isMut": true,
           "isSigner": false
         },
@@ -213,6 +187,11 @@
           "name": "player",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": []
@@ -231,7 +210,17 @@
           "isSigner": false
         },
         {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "player",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "owner",
           "isMut": true,
           "isSigner": true
         }
@@ -246,11 +235,15 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "initialized",
+            "name": "game",
+            "type": "publicKey"
+          },
+          {
+            "name": "initalized",
             "type": "bool"
           },
           {
-            "name": "game",
+            "name": "owner",
             "type": "publicKey"
           },
           {
@@ -369,5 +362,8 @@
       "name": "NotEnoughToSubmit",
       "msg": "Not enough to submit to the leaderboards"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "67714KFVqCYNTu7NUCjtMuid55dKutnXmjXpeqJEwmpu"
+  }
 }

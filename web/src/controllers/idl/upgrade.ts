@@ -44,37 +44,6 @@ export type Upgrade = {
       ]
     },
     {
-      "name": "start",
-      "accounts": [
-        {
-          "name": "clicker",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "game",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "player",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "click",
       "accounts": [
         {
@@ -134,7 +103,7 @@ export type Upgrade = {
           "isSigner": false
         },
         {
-          "name": "playerVault",
+          "name": "ownerVault",
           "isMut": true,
           "isSigner": false
         },
@@ -160,6 +129,11 @@ export type Upgrade = {
         },
         {
           "name": "player",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "owner",
           "isMut": true,
           "isSigner": true
         }
@@ -185,7 +159,7 @@ export type Upgrade = {
           "isSigner": false
         },
         {
-          "name": "playerVault",
+          "name": "ownerVault",
           "isMut": true,
           "isSigner": false
         },
@@ -213,6 +187,11 @@ export type Upgrade = {
           "name": "player",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": []
@@ -231,7 +210,17 @@ export type Upgrade = {
           "isSigner": false
         },
         {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "player",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "owner",
           "isMut": true,
           "isSigner": true
         }
@@ -246,11 +235,15 @@ export type Upgrade = {
         "kind": "struct",
         "fields": [
           {
-            "name": "initialized",
+            "name": "game",
+            "type": "publicKey"
+          },
+          {
+            "name": "initalized",
             "type": "bool"
           },
           {
-            "name": "game",
+            "name": "owner",
             "type": "publicKey"
           },
           {
@@ -418,37 +411,6 @@ export const IDL: Upgrade = {
       ]
     },
     {
-      "name": "start",
-      "accounts": [
-        {
-          "name": "clicker",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "game",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "player",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "click",
       "accounts": [
         {
@@ -508,7 +470,7 @@ export const IDL: Upgrade = {
           "isSigner": false
         },
         {
-          "name": "playerVault",
+          "name": "ownerVault",
           "isMut": true,
           "isSigner": false
         },
@@ -534,6 +496,11 @@ export const IDL: Upgrade = {
         },
         {
           "name": "player",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "owner",
           "isMut": true,
           "isSigner": true
         }
@@ -559,7 +526,7 @@ export const IDL: Upgrade = {
           "isSigner": false
         },
         {
-          "name": "playerVault",
+          "name": "ownerVault",
           "isMut": true,
           "isSigner": false
         },
@@ -587,6 +554,11 @@ export const IDL: Upgrade = {
           "name": "player",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
         }
       ],
       "args": []
@@ -605,7 +577,17 @@ export const IDL: Upgrade = {
           "isSigner": false
         },
         {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "player",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "owner",
           "isMut": true,
           "isSigner": true
         }
@@ -620,11 +602,15 @@ export const IDL: Upgrade = {
         "kind": "struct",
         "fields": [
           {
-            "name": "initialized",
+            "name": "game",
+            "type": "publicKey"
+          },
+          {
+            "name": "initalized",
             "type": "bool"
           },
           {
-            "name": "game",
+            "name": "owner",
             "type": "publicKey"
           },
           {
