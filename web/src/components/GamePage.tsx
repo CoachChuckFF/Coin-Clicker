@@ -1,23 +1,24 @@
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { FaGithub, FaTwitter } from "react-icons/fa";
+import { FaGithub, FaTwitter } from 'react-icons/fa';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppState } from '../hooks/ClickerStore';
-import { toast } from 'react-toastify';
-import { GameButton } from './Button';
 import { UPGRADES, getCpS, getNextCost } from '../models/upgrades';
-import { STARTING_ENTRIES, TerminalColor, TerminalEntry } from '../models/terminal';
+import { STARTING_ENTRIES, TerminalEntry } from '../models/terminal';
 import { LeaderboardEntry } from '../models/leaderboard';
 import { formatNumber } from '../controllers/helpers';
 import CoinView from './CoinView';
+import ConfettiArea from './Confetti';
 
 function GamePage() {
     // ----------- STATE ------------------------
 
+    const [coinClicked, setCoinClicked] = useState(false);
     const [terminalEntries, setTerminalEntries] = useState<TerminalEntry[]>(STARTING_ENTRIES);
     const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>([]);
     const terminalRef = useRef<HTMLDivElement>(null);
 
     const {
+        isLoading,
         clickerAccount,
         lastTerminalEntry,
         gameWithdraw,
@@ -27,6 +28,7 @@ function GamePage() {
         clickerUpgrade,
         gameAccount,
         playerBalance,
+        tokenBalance,
         walletBalance,
     } = useAppState();
 
@@ -85,6 +87,11 @@ function GamePage() {
     };
 
     const handleClick = async () => {
+        if (!coinClicked && !isLoading) {
+            setCoinClicked(true);
+            setTimeout(() => setCoinClicked(false), 100); // Set the duration of the pop effect here
+        }
+
         if (clickEnabled) {
             clickerClick();
         } else if (depositEnabled) {
@@ -121,9 +128,9 @@ function GamePage() {
                 )}
                 <img
                     onClick={handleClick}
-                    src="https://arweave.net/AVwhbS2Zc8sIOcgEIaTDCRhh-enHdpzNqZURNVFm_eI"
+                    src="https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/coin-lg.png"
                     alt="Placeholder Image"
-                    className="object-contain w-full cursor-pointer"
+                    className={`object-contain w-full cursor-pointer ${coinClicked ? 'scale-lg' : 'scale-reg'}`}
                 />
             </>
         );
@@ -131,32 +138,51 @@ function GamePage() {
 
     const renderWalletSection = () => {
         return (
-            <div className="h-full flex flex-col">
-                <div className="h-[70%] w-full flex justify-around items-center">
-                    <div
-                        onClick={(handleDeposit)}
-                        className={`bg-solana-blue w-full font-bold py-2 mx-3 text-center rounded cursor-pointer ${depositEnabled ? 'bg-solana-blue hover:bg-solana-blue-pressed hover:text-stone-200 text-white' : ' bg-opacity-20 text-stone-500 cursor-not-allowed'}`}
-                    >
-                        Deposit ◎ 0.01
+            <div className="h-full flex">
+                {/* Left column */}
+                <div className="w-full flex flex-col">
+                    <div className="h-[50%] flex justify-around items-center">
+                        <button
+                            onClick={handleDeposit}
+                            className={`w-full py-2 mx-3 text-center rounded cursor-pointer ${
+                                depositEnabled
+                                    ? ' hover:text-stone-400 text-white'
+                                    : 'bg-opacity-20 text-stone-500 cursor-not-allowed'
+                            }`}
+                        >
+                            &#9608; Deposit ◎ 0.01
+                        </button>
+                        <button
+                            onClick={handleWithdraw}
+                            className={`w-full font-bold py-2 mx-3 text-center rounded cursor-pointer ${
+                                withdrawEnabled
+                                    ? 'hover:text-stone-400 text-white'
+                                    : ' bg-opacity-20 text-stone-500 cursor-not-allowed'
+                            }`}
+                        >
+                            &#9608; Withdraw
+                        </button>
+                        <button
+                            onClick={handleSubmit}
+                            className={`w-full font-bold py-2 mx-3 text-center rounded cursor-pointer ${
+                                submitEnabled
+                                    ? 'hover:text-stone-400 text-white'
+                                    : ' bg-opacity-20 text-stone-500 cursor-not-allowed'
+                            }`}
+                        >
+                            &#9608; Submit
+                        </button>
                     </div>
-                    <div
-                        onClick={handleWithdraw}
-                        className={`bg-solana-blue w-full font-bold py-2 mx-3 text-center rounded cursor-pointer ${withdrawEnabled ? 'bg-solana-blue hover:bg-solana-blue-pressed hover:text-stone-200 text-white' : ' bg-opacity-20 text-stone-500 cursor-not-allowed'}`}
-                    >
-                        Withdraw
+                    <div className="h-[50%] flex justify-around items-center mt-3 text-stone-500">
+                        <p className="text-center">Player: ◎ {playerBalance?.toFixed(6) ?? 'X'}</p>
+                        <p className="text-center">Wallet Coins: {tokenBalance?.toFixed(0) ?? 'X'}</p>
+                        <p className="text-center">Wallet: ◎ {walletBalance?.toFixed(6) ?? 'X'}</p>
                     </div>
-                    <div
-                        onClick={handleSubmit}
-                        className={`bg-solana-blue w-full font-bold py-2 mx-3 text-center rounded cursor-pointer ${submitEnabled ? 'bg-solana-blue hover:bg-solana-blue-pressed hover:text-stone-200 text-white' : ' bg-opacity-20 text-stone-500 cursor-not-allowed'}`}
-                    >
-                        Submit
-                    </div>
-                    <WalletMultiButton />
                 </div>
-                <div className="h-[30%] w-full flex justify-around items-center">
-                    <p className="text-center w-full">Player: ◎ {playerBalance?.toFixed(6) ?? 'X'}</p>
-                    <p className="text-center w-full">Wallet Coins: {0?.toFixed(0) ?? 'X'}</p>
-                    <p className="text-center w-full">Wallet: ◎ {walletBalance?.toFixed(6) ?? 'X'}</p>
+
+                {/* Right column */}
+                <div className="flex justify-center items-center min-w-fit">
+                    <WalletMultiButton />
                 </div>
             </div>
         );
@@ -176,13 +202,17 @@ function GamePage() {
                     return (
                         <div
                             key={i}
-                            onClick={() =>{if(buyEnabled) handleUpgrade(i)}}
+                            onClick={() => {
+                                if (buyEnabled) handleUpgrade(i);
+                            }}
                             className="rounded shadow relative group overflow-hidden"
                             style={{ backgroundImage: `url(${upgrade.image})`, backgroundSize: 'cover' }}
                         >
                             <div
-                                className={`font-mono w-full h-full bg-black bg-opacity-75 backdrop-filter backdrop-blur cursor-pointer ${
-                                    buyEnabled ? 'bg-black bg-opacity-60 hover:backdrop-blur-none' : 'bg-opacity-85 backdrop-blur text-stone-500 cursor-not-allowed'
+                                className={`shadow-lg font-mono w-full h-full bg-black bg-opacity-75 backdrop-filter backdrop-blur cursor-pointer ${
+                                    buyEnabled
+                                        ? 'bg-black bg-opacity-60 hover:backdrop-blur-none'
+                                        : 'bg-opacity-85 backdrop-blur text-stone-500 cursor-not-allowed'
                                 } `}
                             >
                                 <div className="p-4 flex flex-col justify-between h-full">
@@ -243,29 +273,23 @@ function GamePage() {
 
     const renderSocials = () => {
         return (
-            <div className="absolute top-4 left-4 space-x-4">
-            <a
-                href="https://github.com/CoachChuckFF/Coin-Clicker"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <FaGithub className="text-2xl text-solana-light hover:text-solana-blue-pressed cursor-pointer" />
-            </a>
-            <a
-                href="https://twitter.com/CoachChuckFF"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <FaTwitter className="text-2xl text-solana-light hover:text-solana-blue-pressed cursor-pointer" />
-            </a>
+            <div className="absolute top-4 left-4 space-x-4 shadow-lg">
+                <a href="https://github.com/CoachChuckFF/Coin-Clicker" target="_blank" rel="noopener noreferrer">
+                    <FaGithub className="text-2xl text-solana-light hover:text-solana-blue cursor-pointer" />
+                </a>
+                <a href="https://twitter.com/CoachChuckFF shadow-lg" target="_blank" rel="noopener noreferrer">
+                    <FaTwitter className="text-2xl text-solana-light hover:text-solana-blue cursor-pointer" />
+                </a>
             </div>
         );
-    }
+    };
 
     // ----------- PAGE ------------------------
     return (
-        <div className="font-mono w-screen h-screen flex bg-solana-black text-solana-light">
+        <div className="font-mono w-screen h-screen flex text-solana-light -z-20">
             {renderSocials()}
+            <ConfettiArea />
+
             <div className="w-1/3 h-full flex items-center justify-center p-8 flex-col">{renderClickerSection()}</div>
             <div className="w-2/3 h-full flex flex-col p-4">
                 <div className="h-1/5 p-4 rounded shadow-lg bg-solana-dark">{renderWalletSection()}</div>

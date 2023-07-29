@@ -1,7 +1,35 @@
 body {
-    background-color: black
+    background-color: #1B1917
 }
 
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.scale-reg {
+    transition: transform 0.3s;
+    transform: scale(1);
+}
+
+.scale-lg {
+    transition: transform 0.3s;
+    transform: scale(1.21);
+}
+
+.confetti-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.confetti-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);  /* Adjust the last value to change the opacity */
+    backdrop-filter: blur(5px);  /* Adjust this value to change the blur amount */
+    z-index: -1;
+}

@@ -8,6 +8,7 @@ import { grabLocalKeypair } from '../controllers/storage';
 import { TerminalColor, TerminalEntry } from '../models/terminal';
 import { UPGRADES } from '../models/upgrades';
 import { formatNumber } from '../controllers/helpers';
+import { getAccount as getTokenAccount } from "@solana/spl-token"
 
 export type CombinedState = AppSlice;
 
@@ -65,10 +66,17 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
             });
         })
 
-        const tokenListener = connection.onAccountChange(wallet.publicKey, (walletAccount) => {
-            set({
-                tokenBalance: walletAccount.lamports / LAMPORTS_PER_SOL,
-            });
+        const tokenListener = connection.onAccountChange(clickerTokenKey, (_) => {
+            getTokenAccount(connection, clickerTokenKey).then((tokenAccount)=>{
+                set({
+                    tokenBalance: Number(tokenAccount.amount),
+                });
+            }).catch((err) => {
+                set({
+                    tokenBalance: null,
+                });
+                console.log(`Error token balance [${err}]`);
+            })
         })
 
         const playerListener = connection.onAccountChange(playerKeypair.publicKey, (walletAccount) => {
@@ -91,6 +99,17 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
         });
 
         // ------ ASYNC STUFF ------
+        getTokenAccount(connection, clickerTokenKey).then((tokenAccount)=>{
+            set({
+                tokenBalance: Number(tokenAccount.amount),
+            });
+        }).catch((err) => {
+            set({
+                tokenBalance: null,
+            });
+            console.log(`Error token balance [${err}]`);
+        })
+
         connection.getBalance(wallet.publicKey).then((balance) => {
             set({
                 walletBalance: balance / LAMPORTS_PER_SOL,
@@ -258,37 +277,51 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
         if(clickerProgram && clickerKey && wallet && gameKeypair && !isLoading){
             set({isLoading: true,})
 
-            submitClickerAccount(wallet, gameKeypair, clickerProgram, clickerKey).then(() => {
+            clickClickerAccount(gameKeypair, clickerProgram, clickerKey).then(()=>{
+                submitClickerAccount(wallet, gameKeypair, clickerProgram, clickerKey).then(() => {
 
-                clickerProgram.account.game.fetch(CLICKER_GAME_KEY).then((gameAccount)=>{
-                    set({
-                        gameAccount
+                    clickerProgram.account.game.fetch(CLICKER_GAME_KEY).then((gameAccount)=>{
+                        set({
+                            gameAccount
+                        })
                     })
-                })
-
+    
+                    set({
+                        clickerAccount: null,
+                        lastTerminalEntry: {
+                            type: TerminalColor.system,
+                            timestamp: Date.now(),
+                            message:'You have submitted your Coins to the leaderboard! Good job! Note - this means your account no logner exists - think of it like prestiging',
+                        }
+    
+                    })
+                }).catch((e)=>{
+                console.log(`${e}`)
+    
                 set({
-                    clickerAccount: null,
                     lastTerminalEntry: {
-                        type: TerminalColor.system,
+                        type: TerminalColor.error,
                         timestamp: Date.now(),
-                        message:'You have submitted your Coins to the leaderboard! Good job! Note - this means your account no logner exists - think of it like prestiging',
+                        message:`Error submitting to leaderboard ( ${e} )`,
                     }
-
+                })
+                }).finally(()=>{
+    
+                    set({isLoading: false,})
                 })
             }).catch((e)=>{
-            console.log(`${e}`)
-
-            set({
-                lastTerminalEntry: {
-                    type: TerminalColor.error,
-                    timestamp: Date.now(),
-                    message:`Error submitting to leaderboard ( ${e} )`,
-                }
+                console.log(`${e}`)
+    
+                set({
+                    isLoading: false,
+                    lastTerminalEntry: {
+                        type: TerminalColor.error,
+                        timestamp: Date.now(),
+                        message:`Error submitting to leaderboard ( ${e} )`,
+                    }
+                })
             })
-            }).finally(()=>{
 
-                set({isLoading: false,})
-            })
         }
     }
 
