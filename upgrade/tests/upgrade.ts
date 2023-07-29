@@ -16,13 +16,11 @@ describe("upgrade", () => {
   const program = anchor.workspace.Upgrade as Program<Upgrade>;
   const provider = anchor.getProvider();
   const wallet = anchor.workspace.Upgrade.provider
-    .wallet as anchor.web3.Keypair;
+    .wallet.payer as anchor.web3.Keypair;
 
   const mint = anchor.web3.Keypair.generate();
 
-  const ownerVault = token.getAssociatedTokenAddressSync(mint.publicKey, wallet.publicKey);
-
-  const [metadata] = getMetadataKey(mint.publicKey);
+  const playerVault = token.getAssociatedTokenAddressSync(mint.publicKey, wallet.publicKey);
 
   const [game, gameBump] = anchor.web3.PublicKey.findProgramAddressSync(
     [Buffer.from("GAME"), wallet.publicKey.toBuffer()],
@@ -34,39 +32,33 @@ describe("upgrade", () => {
     program.programId
   );
 
-  // it("Game", async () => {
-  //   try {
-  //     // Add your test here.
-  //     await program.methods
-  //       .create(
-  //         gameBump,
-  //         {
-  //           name: "Clicker Coin",
-  //           symbol: "COIN",
-  //           uri: "https://arweave.net/2gHFk_2OuDvoCBH5ZZv7yGF1wf2Uj-uU-2LgnTreN4o"
-  //         }
-  //       )
-  //       .accounts({
-  //         game: game,
-  //         owner: wallet.publicKey,
-  //         mint: mint.publicKey,
-  //         ownerVault: ownerVault,
-  //         metadata: metadata,
-  //         tokenMetadataProgram: METAPLEX_METADATA_ID,
-  //         tokenProgram: token.TOKEN_PROGRAM_ID,
-  //         associatedTokenProgram: token.ASSOCIATED_TOKEN_PROGRAM_ID,
-  //         systemProgram: anchor.web3.SystemProgram.programId,
-  //         rent: anchor.web3.SYSVAR_RENT_PUBKEY,
-  //       })
-  //       .signers([mint])
-  //       .rpc();
+  before(async()=>{
+    await token.createMint(provider.connection, wallet, wallet.publicKey, wallet.publicKey, 0, mint)
+  })
 
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // });
+  it("Game", async () => {
+    try {
+      // Add your test here.
+      await program.methods
+        .create(
+          gameBump,
+        )
+        .accounts({
+          game: game,
+          owner: wallet.publicKey,
+          mint: mint.publicKey,
+          tokenProgram: token.TOKEN_PROGRAM_ID,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+        })
+        .rpc();
 
-  it.only("Start", async () => {
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  it("Start", async () => {
     try {
       // Add your test here.
       await program.methods
@@ -115,20 +107,78 @@ describe("upgrade", () => {
     console.log(clickerAccount.points.toNumber());
   });
 
-  it("Click Upgraded", async () => {
-    const clicks = 10; // Replace this with the number of times you want to run the code
+  it("Withdraw", async () => {
 
-    for (let i = 0; i < clicks; i++) {
+    try {
       await program.methods
-        .click()
+        .withdraw()
         .accounts({
+          game: game,
           clicker: clicker,
+          mint: mint.publicKey,
+          playerVault: playerVault,
           player: wallet.publicKey,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+          tokenProgram: token.TOKEN_PROGRAM_ID,
+          associatedTokenProgram: token.ASSOCIATED_TOKEN_PROGRAM_ID
         })
         .rpc();
 
       const clickerAccount = await program.account.clicker.fetch(clicker);
       console.log(clickerAccount.points.toNumber());
+    } catch(e){
+      console.log(e)
     }
+
+
+  });
+
+  it("Deposit", async () => {
+
+    try {
+      await program.methods
+        .deposit()
+        .accounts({
+          game: game,
+          clicker: clicker,
+          mint: mint.publicKey,
+          playerVault: playerVault,
+          player: wallet.publicKey,
+          systemProgram: anchor.web3.SystemProgram.programId,
+          rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+          tokenProgram: token.TOKEN_PROGRAM_ID,
+          associatedTokenProgram: token.ASSOCIATED_TOKEN_PROGRAM_ID
+        })
+        .rpc();
+
+      const clickerAccount = await program.account.clicker.fetch(clicker);
+      console.log(clickerAccount.points.toNumber());
+    } catch(e){
+      console.log(e)
+    }
+
+
+  });
+
+  it("Submit", async () => {
+
+    try {
+      await program.methods
+        .submit()
+        .accounts({
+          game: game,
+          clicker: clicker,
+          player: wallet.publicKey,
+        })
+        .rpc();
+
+      const gameAccount = await program.account.game.fetch(game);
+      console.log(gameAccount.leaderboards);
+    } catch(e){
+      console.log(e)
+    }
+
+
   });
 });

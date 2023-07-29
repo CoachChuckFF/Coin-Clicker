@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use crate::clicker_accounts::clicker_account::Clicker;
-use crate::clicker_globals::constants::{BASE_COSTS, BASE_POINTS};
+use crate::clicker_globals::constants::{BASE_COSTS, BASE_POINTS, CLICKER_SEED};
 use crate::clicker_globals::errors::CodeErrors;
 use crate::clicker_globals::helpers::get_upgrade_cost;
 
@@ -9,8 +9,6 @@ use crate::clicker_globals::helpers::get_upgrade_cost;
 pub struct Upgrade<'info>{
     #[account(
         mut,
-        seeds = [b"CLICKER", player.key().as_ref()],
-        bump,
         has_one = player,
     )]
     pub clicker: Account<'info, Clicker>,

@@ -9,4 +9,6 @@ pub enum CodeErrors {
     NotAValidAmount,
     #[msg("Not enough to fund upgrade")]
     NotEnoughToFundUpgrade,
+    #[msg("Not enough to submit to the leaderboards")]
+    NotEnoughToSubmit,
 }

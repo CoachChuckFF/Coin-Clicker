@@ -7,8 +7,6 @@ use crate::clicker_globals::constants::BASE_POINTS;
 pub struct Click<'info>{
     #[account(
         mut,
-        seeds = [CLICKER_SEED, player.key().as_ref()],
-        bump,
         has_one = player,
     )]
     pub clicker: Account<'info, Clicker>,

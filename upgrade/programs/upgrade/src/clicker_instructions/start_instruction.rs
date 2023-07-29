@@ -16,11 +16,8 @@ pub struct Start<'info>{
     )]
     pub clicker: Account<'info, Clicker>,
 
-    // #[account()]
-    // pub game: Box<Account<'info, Game>>,
-
-    /// CHECK: Test
-    pub game: UncheckedAccount<'info>,
+    #[account()]
+    pub game: Box<Account<'info, Game>>,
 
     #[account(mut)]
     pub player: Signer<'info>,
@@ -34,8 +31,9 @@ pub fn run_start(ctx: Context<Start>) -> Result<()> {
     let clicker = &mut ctx.accounts.clicker;
     let now = Clock::get()?.unix_timestamp;
 
+    clicker.initialized = true;
     clicker.player = ctx.accounts.player.key().clone();
-    // clicker.game = ctx.accounts.game.key().clone();
+    clicker.game = ctx.accounts.game.key().clone();
 
     clicker.points = 0; 
     clicker.game_flags = 0;
