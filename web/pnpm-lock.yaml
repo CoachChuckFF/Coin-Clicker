@@ -17,6 +17,9 @@ dependencies:
   '@project-serum/anchor':
     specifier: ^0.26.0
     version: 0.26.0
+  '@solana/spl-token':
+    specifier: ^0.3.8
+    version: 0.3.8(@solana/web3.js@1.78.0)
   '@solana/wallet-adapter-base':
     specifier: ^0.9.22
     version: 0.9.22(@solana/web3.js@1.78.0)

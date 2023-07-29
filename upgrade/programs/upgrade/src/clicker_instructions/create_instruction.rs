@@ -1,9 +1,7 @@
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::program::invoke_signed;
 use anchor_lang::solana_program::sysvar::rent;
-use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::token::{set_authority, SetAuthority};
-use anchor_spl::token::{Mint, Token, TokenAccount};
+use anchor_spl::token::{Mint, Token};
 use anchor_spl::token::spl_token::instruction::AuthorityType::MintTokens;
 
 use crate::clicker_accounts::game_account::{Game, LeaderboardEntry};
@@ -14,7 +12,7 @@ use crate::clicker_globals::constants::GAME_SEED;
 pub struct Create<'info>{
     #[account(
         init,
-        seeds = [GAME_SEED, owner.key().as_ref()],
+        seeds = [GAME_SEED, mint.key().as_ref()],
         bump,
         payer = owner,
         space = std::mem::size_of::<Game>() + 8,
@@ -34,6 +32,7 @@ pub struct Create<'info>{
 
     #[account(mut)]
     pub owner: Signer<'info>,
+    
 }
 
 pub fn run_create(ctx: Context<Create>, bump: u8) -> Result<()> {

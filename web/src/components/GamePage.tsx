@@ -60,7 +60,7 @@ function GamePage() {
         return (
             <>
                 <p>Points {clickerAccount.points.toString()}</p>
-                <p>PPC {(clickerAccount.clickerUpgrades[0].toNumber() + 1).toString()}</p>
+                <p>PPC {(clickerAccount.clickerUpgrades[0] + 1).toString()}</p>
                 <p>PPS {clickerAccount.clickerUpgrades[9].toString()}</p>
             </>
         )

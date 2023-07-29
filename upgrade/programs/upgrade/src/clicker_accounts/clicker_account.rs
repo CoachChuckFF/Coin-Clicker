@@ -2,8 +2,9 @@ use anchor_lang::prelude::*;
 
 #[account]
 pub struct Clicker {
-    pub initialized: bool,
     pub game: Pubkey,
+    pub initalized: bool,
+    pub owner: Pubkey,
     pub player: Pubkey,
     pub date_created: i64,
     pub last_updated: i64,

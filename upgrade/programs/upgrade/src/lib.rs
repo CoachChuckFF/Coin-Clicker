@@ -2,7 +2,6 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::log::sol_log_compute_units;
 
 use clicker_instructions::click_instruction::*;
-use clicker_instructions::start_instruction::*;
 use clicker_instructions::upgrade_instruction::*;
 use clicker_instructions::create_instruction::*;
 use clicker_instructions::withdraw_instruction::*;
@@ -30,13 +29,6 @@ pub mod upgrade {
 
     pub fn create(ctx: Context<Create>, bump: u8) -> Result<()> {
         run_create(ctx, bump)?;
-        sol_log_compute_units();
-
-        Ok(())
-    }
-
-    pub fn start(ctx: Context<Start>) -> Result<()> {
-        run_start(ctx)?;
         sol_log_compute_units();
 
         Ok(())

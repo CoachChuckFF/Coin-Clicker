@@ -3,11 +3,57 @@ export type Upgrade = {
   "name": "upgrade",
   "instructions": [
     {
+      "name": "create",
+      "accounts": [
+        {
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
       "name": "start",
       "accounts": [
         {
           "name": "clicker",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "game",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -60,14 +106,137 @@ export type Upgrade = {
       ],
       "args": [
         {
-          "name": "upgrade",
-          "type": "u64"
+          "name": "upgradeIndex",
+          "type": "u8"
         },
         {
           "name": "amount",
-          "type": "u64"
+          "type": "u8"
         }
       ]
+    },
+    {
+      "name": "withdraw",
+      "accounts": [
+        {
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "clicker",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "deposit",
+      "accounts": [
+        {
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "clicker",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "submit",
+      "accounts": [
+        {
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "clicker",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -77,7 +246,23 @@ export type Upgrade = {
         "kind": "struct",
         "fields": [
           {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "game",
+            "type": "publicKey"
+          },
+          {
+            "name": "player",
+            "type": "publicKey"
+          },
+          {
             "name": "dateCreated",
+            "type": "i64"
+          },
+          {
+            "name": "lastUpdated",
             "type": "i64"
           },
           {
@@ -85,20 +270,104 @@ export type Upgrade = {
             "type": "u64"
           },
           {
-            "name": "clickerUpgrades",
+            "name": "gameFlags",
+            "type": "u64"
+          },
+          {
+            "name": "clickerModifiers",
             "type": {
               "array": [
-                "u64",
-                10
+                "u8",
+                16
               ]
             }
           },
           {
-            "name": "lastUpdated",
-            "type": "i64"
+            "name": "clickerUpgrades",
+            "type": {
+              "array": [
+                "u16",
+                16
+              ]
+            }
           }
         ]
       }
+    },
+    {
+      "name": "game",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "dateCreated",
+            "type": "i64"
+          },
+          {
+            "name": "leaderboards",
+            "type": {
+              "array": [
+                {
+                  "defined": "LeaderboardEntry"
+                },
+                10
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "LeaderboardEntry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NotAValidUpgrade",
+      "msg": "Not a valid upgrade index"
+    },
+    {
+      "code": 6001,
+      "name": "NotAValidAmount",
+      "msg": "Not a valid amount"
+    },
+    {
+      "code": 6002,
+      "name": "NotEnoughToFundUpgrade",
+      "msg": "Not enough to fund upgrade"
+    },
+    {
+      "code": 6003,
+      "name": "NotEnoughToSubmit",
+      "msg": "Not enough to submit to the leaderboards"
     }
   ]
 };
@@ -108,11 +377,57 @@ export const IDL: Upgrade = {
   "name": "upgrade",
   "instructions": [
     {
+      "name": "create",
+      "accounts": [
+        {
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
       "name": "start",
       "accounts": [
         {
           "name": "clicker",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "game",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -165,14 +480,137 @@ export const IDL: Upgrade = {
       ],
       "args": [
         {
-          "name": "upgrade",
-          "type": "u64"
+          "name": "upgradeIndex",
+          "type": "u8"
         },
         {
           "name": "amount",
-          "type": "u64"
+          "type": "u8"
         }
       ]
+    },
+    {
+      "name": "withdraw",
+      "accounts": [
+        {
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "clicker",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "deposit",
+      "accounts": [
+        {
+          "name": "game",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "clicker",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "submit",
+      "accounts": [
+        {
+          "name": "game",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "clicker",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -182,7 +620,23 @@ export const IDL: Upgrade = {
         "kind": "struct",
         "fields": [
           {
+            "name": "initialized",
+            "type": "bool"
+          },
+          {
+            "name": "game",
+            "type": "publicKey"
+          },
+          {
+            "name": "player",
+            "type": "publicKey"
+          },
+          {
             "name": "dateCreated",
+            "type": "i64"
+          },
+          {
+            "name": "lastUpdated",
             "type": "i64"
           },
           {
@@ -190,20 +644,104 @@ export const IDL: Upgrade = {
             "type": "u64"
           },
           {
-            "name": "clickerUpgrades",
+            "name": "gameFlags",
+            "type": "u64"
+          },
+          {
+            "name": "clickerModifiers",
             "type": {
               "array": [
-                "u64",
-                10
+                "u8",
+                16
               ]
             }
           },
           {
-            "name": "lastUpdated",
-            "type": "i64"
+            "name": "clickerUpgrades",
+            "type": {
+              "array": [
+                "u16",
+                16
+              ]
+            }
           }
         ]
       }
+    },
+    {
+      "name": "game",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "dateCreated",
+            "type": "i64"
+          },
+          {
+            "name": "leaderboards",
+            "type": {
+              "array": [
+                {
+                  "defined": "LeaderboardEntry"
+                },
+                10
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "LeaderboardEntry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "wallet",
+            "type": "publicKey"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NotAValidUpgrade",
+      "msg": "Not a valid upgrade index"
+    },
+    {
+      "code": 6001,
+      "name": "NotAValidAmount",
+      "msg": "Not a valid amount"
+    },
+    {
+      "code": 6002,
+      "name": "NotEnoughToFundUpgrade",
+      "msg": "Not enough to fund upgrade"
+    },
+    {
+      "code": 6003,
+      "name": "NotEnoughToSubmit",
+      "msg": "Not enough to submit to the leaderboards"
     }
   ]
 };

@@ -1,20 +1,30 @@
 import { Connection, PublicKey, SYSVAR_RENT_PUBKEY, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
-import { IDL, Upgrade } from "../controllers/idl/upgrade";
 import { Program, IdlAccounts, AnchorProvider, BN } from "@coral-xyz/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
+import { IDL, Upgrade } from "../controllers/idl/upgrade";
+import { getAssociatedTokenAddressSync} from "@solana/spl-token";
 
 
-export const CLICKER_PROGRAM_ID = new PublicKey("67714KFVqCYNTu7NUCjtMuid55dKutnXmjXpeqJEwmpu");
+export const CLICKER_PROGRAM_ID = new PublicKey(process.env.REACT_APP_PROGRAM_KEY as string);
+export const CLICKER_GAME_KEY = new PublicKey(process.env.REACT_APP_GAME_KEY as string);
+export const CLICKER_MINT_KEY = new PublicKey(process.env.REACT_APP_MINT_KEY as string);
+
 
 export type ClickerStruct = IdlAccounts<Upgrade>["clicker"];
+export type GameStruct = IdlAccounts<Upgrade>["game"];
 
 export function getClickerKey(program: Program<Upgrade>, player: PublicKey){
     const [clickerKey] = PublicKey.findProgramAddressSync(
-        [Buffer.from("CLICKER"), player.toBuffer()],
+        [Buffer.from("CLICKER"), CLICKER_GAME_KEY.toBuffer(), player.toBuffer()],
         program.programId
     )
 
     return clickerKey;
+}
+
+export function getClickerTokenKey(player: PublicKey){
+
+    return getAssociatedTokenAddressSync(CLICKER_MINT_KEY, player);
 }
 
 export function getClickerProgram(wallet: AnchorWallet, connection: Connection){
@@ -33,6 +43,11 @@ export function getClickerProgram(wallet: AnchorWallet, connection: Connection){
 export function fetchClickerAccount(program: Program<Upgrade>, clickerKey: PublicKey){
 
     return program.account.clicker.fetch(clickerKey);
+}
+
+export function fetchGameAccount(program: Program<Upgrade>){
+
+    return program.account.game.fetch(CLICKER_GAME_KEY);
 }
 
 async function sendAndConfirmIx(wallet: AnchorWallet, connection: Connection, ix: TransactionInstruction){
@@ -68,6 +83,7 @@ export async function createClickerAccount(wallet: AnchorWallet, program: Progra
 
     const ix = await program.methods.start().accounts({
         clicker: clickerKey,
+        game: CLICKER_GAME_KEY,
         player: program.provider.publicKey,
         systemProgram: SystemProgram.programId,
         rent: SYSVAR_RENT_PUBKEY
@@ -95,8 +111,21 @@ export async function clickClickerAccount(wallet: AnchorWallet, program: Program
 
 export async function upgradeClickerAccount(upgrade: number, amount: number, wallet: AnchorWallet, program: Program<Upgrade>, clickerKey: PublicKey){
     const ix = await program.methods.upgrade(
-        new BN(upgrade),
-        new BN(amount),
+        upgrade, amount
+    )
+        .accounts({
+        clicker: clickerKey,
+        player: program.provider.publicKey,
+    }).instruction()
+
+    await sendAndConfirmIx(wallet, program.provider.connection, ix);
+
+    return fetchClickerAccount(program, clickerKey);
+}
+
+export async function withdrawClickerAccount(upgrade: number, amount: number, wallet: AnchorWallet, program: Program<Upgrade>, clickerKey: PublicKey){
+    const ix = await program.methods.upgrade(
+        upgrade, amount
     )
         .accounts({
         clicker: clickerKey,

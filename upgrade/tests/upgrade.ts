@@ -15,25 +15,28 @@ describe("upgrade", () => {
 
   const program = anchor.workspace.Upgrade as Program<Upgrade>;
   const provider = anchor.getProvider();
-  const wallet = anchor.workspace.Upgrade.provider
+  const owner = anchor.workspace.Upgrade.provider
     .wallet.payer as anchor.web3.Keypair;
+
+  const player = anchor.web3.Keypair.generate();
 
   const mint = anchor.web3.Keypair.generate();
 
-  const playerVault = token.getAssociatedTokenAddressSync(mint.publicKey, wallet.publicKey);
+  const ownerVault = token.getAssociatedTokenAddressSync(mint.publicKey, owner.publicKey);
 
   const [game, gameBump] = anchor.web3.PublicKey.findProgramAddressSync(
-    [Buffer.from("GAME"), wallet.publicKey.toBuffer()],
+    [Buffer.from("GAME"), mint.publicKey.toBuffer()],
     program.programId
   );
 
   const [clicker] = anchor.web3.PublicKey.findProgramAddressSync(
-    [Buffer.from("CLICKER"), game.toBuffer(), wallet.publicKey.toBuffer()],
+    [Buffer.from("CLICKER"), game.toBuffer(), player.publicKey.toBuffer()],
     program.programId
   );
 
   before(async()=>{
-    await token.createMint(provider.connection, wallet, wallet.publicKey, wallet.publicKey, 0, mint)
+    // await provider.connection.requestAirdrop(player.publicKey, anchor.web3.LAMPORTS_PER_SOL);
+    await token.createMint(provider.connection, owner, owner.publicKey, owner.publicKey, 0, mint)
   })
 
   it("Game", async () => {
@@ -45,7 +48,7 @@ describe("upgrade", () => {
         )
         .accounts({
           game: game,
-          owner: wallet.publicKey,
+          owner: owner.publicKey,
           mint: mint.publicKey,
           tokenProgram: token.TOKEN_PROGRAM_ID,
           systemProgram: anchor.web3.SystemProgram.programId,
@@ -53,23 +56,32 @@ describe("upgrade", () => {
         })
         .rpc();
 
+        console.log("Game: " + game.toString());
+        console.log("Mint: " + mint.publicKey.toString());
+
     } catch (e) {
       console.log(e);
     }
   });
 
-  it("Start", async () => {
+  it("Deposit", async () => {
     try {
       // Add your test here.
       await program.methods
-        .start()
+        .deposit()
         .accounts({
-          clicker: clicker,
           game: game,
-          player: wallet.publicKey,
+          clicker: clicker,
+          mint: mint.publicKey,
+          ownerVault: ownerVault,
+          player: player.publicKey,
+          owner: owner.publicKey,
           systemProgram: anchor.web3.SystemProgram.programId,
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
+          tokenProgram: token.TOKEN_PROGRAM_ID,
+          associatedTokenProgram: token.ASSOCIATED_TOKEN_PROGRAM_ID
         })
+        .signers([player])
         .rpc();
 
     } catch (e) {
@@ -85,8 +97,9 @@ describe("upgrade", () => {
         .click()
         .accounts({
           clicker: clicker,
-          player: wallet.publicKey,
+          player: player.publicKey,
         })
+        .signers([player])
         .rpc();
 
       const clickerAccount = await program.account.clicker.fetch(clicker);
@@ -99,8 +112,9 @@ describe("upgrade", () => {
       .upgrade(0, 1)
       .accounts({
         clicker: clicker,
-        player: wallet.publicKey,
+        player: player.publicKey,
       })
+      .signers([player])
       .rpc();
 
     const clickerAccount = await program.account.clicker.fetch(clicker);
@@ -116,17 +130,17 @@ describe("upgrade", () => {
           game: game,
           clicker: clicker,
           mint: mint.publicKey,
-          playerVault: playerVault,
-          player: wallet.publicKey,
+          ownerVault: ownerVault,
+          player: player.publicKey,
+          owner: owner.publicKey,
           systemProgram: anchor.web3.SystemProgram.programId,
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
           tokenProgram: token.TOKEN_PROGRAM_ID,
           associatedTokenProgram: token.ASSOCIATED_TOKEN_PROGRAM_ID
         })
+        .signers([player])
         .rpc();
 
-      const clickerAccount = await program.account.clicker.fetch(clicker);
-      console.log(clickerAccount.points.toNumber());
     } catch(e){
       console.log(e)
     }
@@ -143,13 +157,15 @@ describe("upgrade", () => {
           game: game,
           clicker: clicker,
           mint: mint.publicKey,
-          playerVault: playerVault,
-          player: wallet.publicKey,
+          ownerVault: ownerVault,
+          player: player.publicKey,
+          owner: owner.publicKey,
           systemProgram: anchor.web3.SystemProgram.programId,
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
           tokenProgram: token.TOKEN_PROGRAM_ID,
           associatedTokenProgram: token.ASSOCIATED_TOKEN_PROGRAM_ID
         })
+        .signers([player])
         .rpc();
 
       const clickerAccount = await program.account.clicker.fetch(clicker);
@@ -161,6 +177,22 @@ describe("upgrade", () => {
 
   });
 
+
+  it("Click Upgraded", async () => {
+    await sleep(5000);
+    await program.methods
+      .click()
+      .accounts({
+        clicker: clicker,
+        player: player.publicKey,
+      })
+      .signers([player])
+      .rpc();
+
+    const clickerAccount = await program.account.clicker.fetch(clicker);
+    console.log(clickerAccount.points.toNumber());
+  });
+
   it("Submit", async () => {
 
     try {
@@ -169,8 +201,11 @@ describe("upgrade", () => {
         .accounts({
           game: game,
           clicker: clicker,
-          player: wallet.publicKey,
+          player: player.publicKey,
+          owner: owner.publicKey,
+          systemProgram: anchor.web3.SystemProgram.programId
         })
+        .signers([player])
         .rpc();
 
       const gameAccount = await program.account.game.fetch(game);
