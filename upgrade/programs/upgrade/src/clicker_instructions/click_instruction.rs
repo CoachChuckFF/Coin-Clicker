@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
 use crate::clicker_accounts::clicker_account::Clicker;
-use crate::clicker_globals::constants::CLICKER_SEED;
 use crate::clicker_globals::constants::BASE_POINTS;
 
 #[derive(Accounts)]

@@ -50,7 +50,7 @@ pub struct Deposit<'info>{
 
 pub fn run_deposit(ctx: Context<Deposit>) -> Result<()> {
 
-    let transfer_amount: u64 = 1_000_000_000_u64;
+    let transfer_amount: u64 = 10_000_000_u64;
     if ctx.accounts.player.lamports() < transfer_amount{
         let cpi_context = CpiContext::new(
             ctx.accounts.system_program.to_account_info(), 
@@ -92,7 +92,7 @@ pub fn run_deposit(ctx: Context<Deposit>) -> Result<()> {
             clicker.clicker_upgrades = [0; 16];
             clicker.date_created = now;
         } else {
-            clicker.points = clicker.points.saturating_add(amount_to_burn + 1);
+            clicker.points = clicker.points.saturating_add(amount_to_burn.saturating_add(1));
         }
     
         clicker.last_updated = now;
