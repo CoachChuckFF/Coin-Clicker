@@ -1,4 +1,5 @@
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { FaGithub, FaTwitter } from "react-icons/fa";
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppState } from '../hooks/ClickerStore';
 import { toast } from 'react-toastify';
@@ -240,9 +241,31 @@ function GamePage() {
         );
     };
 
+    const renderSocials = () => {
+        return (
+            <div className="absolute top-4 left-4 space-x-4">
+            <a
+                href="https://github.com/CoachChuckFF/Coin-Clicker"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <FaGithub className="text-2xl text-solana-light hover:text-solana-blue-pressed cursor-pointer" />
+            </a>
+            <a
+                href="https://twitter.com/CoachChuckFF"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <FaTwitter className="text-2xl text-solana-light hover:text-solana-blue-pressed cursor-pointer" />
+            </a>
+            </div>
+        );
+    }
+
     // ----------- PAGE ------------------------
     return (
         <div className="font-mono w-screen h-screen flex bg-solana-black text-solana-light">
+            {renderSocials()}
             <div className="w-1/3 h-full flex items-center justify-center p-8 flex-col">{renderClickerSection()}</div>
             <div className="w-2/3 h-full flex flex-col p-4">
                 <div className="h-1/5 p-4 rounded shadow-lg bg-solana-dark">{renderWalletSection()}</div>
