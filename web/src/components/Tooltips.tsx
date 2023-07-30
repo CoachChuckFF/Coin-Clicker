@@ -33,12 +33,12 @@ export function Tooltips(props: {shouldShow: boolean}){
         <div className="z-50">
             {GameTooltip(TooltipIds.coins, 'Your total Coins and ( Coins to be Redeemed ) - Click to redeem!', 'top-start')}
             {GameTooltip(TooltipIds.cps, 'Your total Coins per Second (CpS)! Increase this by buying upgrades!', 'top-start')}
-            {GameTooltip(TooltipIds.deposit, 'Loads up your Player Wallet so it click, it also burns any coins in your Player Wallet and transfers them to the clicker account.')}
-            {GameTooltip(TooltipIds.withdraw, 'Withdraws all coins from the clicker account, all the solana from the Player Wallet and transfers them to your Wallet.  You can either Withdraw or Submit')}
-            {GameTooltip(TooltipIds.submit, 'CAREFUL! This will submit your coins to the leaderboard, and reset your clicker account! You can either Withdraw or Submit', 'bottom-end')}
-            {GameTooltip(TooltipIds.playerBalance, 'The Player Wallet\'s Solana, this is used to pay the small Solana transaction fee per click.')}
+            {GameTooltip(TooltipIds.deposit, 'Loads up your Player Wallet to pay the tx fees, it also burns any coins in your Player Wallet and transfers them to the clicker account.')}
+            {GameTooltip(TooltipIds.withdraw, 'Withdraws all Coins from the clicker account, all the solana from the Player Wallet and transfers them to your Wallet.')}
+            {GameTooltip(TooltipIds.submit, 'CAREFUL! This will submit your coins to the leaderboard, and reset your clicker account! You can only submit when you\'re playing.', 'bottom-end')}
+            {GameTooltip(TooltipIds.playerBalance, 'The Player Wallet\'s Solana, this is used to pay the small Solana transaction fee per click/upgrade function calls.')}
             {GameTooltip(TooltipIds.walletCoins, 'How many Coins you have in your wallet!')}
-            {GameTooltip(TooltipIds.walletBalance, 'Your Solana Balance')}
+            {GameTooltip(TooltipIds.walletBalance, 'Your Solana balance')}
             {GameTooltip(TooltipIds.upgradeNotUnlocked, 'Keep clicking to unlock this upgrade!', 'top')}
             {GameTooltip(TooltipIds.upgradeNotUnlockedBottom, 'Keep clicking to unlock this upgrade!')}
             {GameTooltip(TooltipIds.upgrade + '0', UPGRADES[0].description, 'top')}

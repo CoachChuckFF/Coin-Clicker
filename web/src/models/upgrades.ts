@@ -60,7 +60,7 @@ export const UPGRADES: UpgradeType[] = [
     },
     {
         name: "Claynos",
-        description: "RAWR! Look at these cutties! All full of clay and adorable! Each adorable dino give you +1400 CpS",
+        description: "RAWR! Look at these cutties! All full of clay and adorable! Each adorable dino gives you +1400 CpS",
         image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/claynos.png",
     
         upgradeIndex: 5,
@@ -69,7 +69,7 @@ export const UPGRADES: UpgradeType[] = [
     },
     {
         name: "Dronies",
-        description: "I'm starting to suspect these birds arn't real... And they seem to be Always Watching... Anyways +7800 CpS",
+        description: "I'm starting to suspect these birds aren't real... And they seem to be... Always Watching... Anyways +7800 CpS",
         image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/dronies.png",
     
         upgradeIndex: 6,
@@ -78,7 +78,7 @@ export const UPGRADES: UpgradeType[] = [
     },
     {
         name: "Coach",
-        description: "IT'S ME, COACH! I'll use my almighty power to give you +44000 CpS for each instance of me!",
+        description: "IT'S ME, COACH! I'll use my almighty power to give you +44000 CpS for each purchase!",
         image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/coach.png",
     
         upgradeIndex: 7,

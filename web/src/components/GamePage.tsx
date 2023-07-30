@@ -279,7 +279,7 @@ function GamePage() {
                             >
                                 <div className="p-4 flex flex-col justify-between h-full">
                                     <div>
-                                        <h2 className="font-bold">{shouldShow ? upgrade.name : `Unlock at ${costString} coins`}</h2>
+                                        <h2 className="font-bold">{shouldShow ? upgrade.name : `Unlock at ${costString}`}</h2>
                                     </div>
                                     {shouldShow ? (
                                     <div>
@@ -321,7 +321,7 @@ function GamePage() {
     const renderLeaderboardSection = () => {
         return (
             <div className="font-mono bg-solana-black text-solana-light rounded shadow p-4 h-full overflow-auto">
-                <h1 className="text-2xl font-bold mb-2 text-center">LEADERBOARD</h1>
+                <h1 data-tooltip-id={TooltipIds.leaderboard} className="text-2xl font-bold mb-2 text-center">LEADERBOARD</h1>
                 <div>
                     {leaderboardEntries.map((player, index) => (
                         <div key={index} className="flex justify-between">
@@ -360,8 +360,8 @@ function GamePage() {
                 <div className="h-1/5 p-4 rounded shadow-lg bg-solana-dark">{renderWalletSection()}</div>
                 <div className="h-3/5 p-4 rounded shadow-lg bg-solana-dark mt-4">{renderStoreSection()}</div>
                 <div className="h-2/5 p-4 rounded shadow-lg bg-solana-dark mt-4 flex">
-                    <div className="w-3/4">{renderTerminalSection()}</div>
-                    <div className="w-1/4">{renderLeaderboardSection()}</div>
+                    <div className="w-2/3">{renderTerminalSection()}</div>
+                    <div className="w-1/3">{renderLeaderboardSection()}</div>
                 </div>
             </div>
         </div>
