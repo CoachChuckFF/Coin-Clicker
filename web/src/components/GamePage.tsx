@@ -19,16 +19,19 @@ function GamePage() {
     const [terminalEntries, setTerminalEntries] = useState<TerminalEntry[]>(STARTING_ENTRIES);
     const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>([]);
     const terminalRef = useRef<HTMLDivElement>(null);
-    const [play, {stop}] = useSound("https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/clicker-sounds.mp3", {
-        sprite: {
-            "coin": [0, 366],
-            "upgrade": [366, 1079],
-            "deposit": [1445, 440],
-            "withdraw": [1858, 3576],
-            "submit": [5434, 4704],
-            "click": [10138, 348]
+    const [play, { stop }] = useSound(
+        'https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/clicker-sounds.mp3',
+        {
+            sprite: {
+                coin: [0, 366],
+                upgrade: [366, 1079],
+                deposit: [1445, 440],
+                withdraw: [1858, 3576],
+                submit: [5434, 4704],
+                click: [10138, 348],
+            },
         }
-    });
+    );
 
     const {
         isLoading,
@@ -68,17 +71,15 @@ function GamePage() {
 
     useEffect(() => {
         if (lastTerminalEntry) {
-
-            if(lastTerminalEntry.message.includes("DEPOSIT")){
-                playSound('deposit')
-            } else if(lastTerminalEntry.message.includes("WITHDRAW")){
-                playSound('withdraw')
-            } else if(lastTerminalEntry.message.includes("SUBMIT")){
-                playSound('submit')
-            } else if(lastTerminalEntry.message.includes("UPGRADE")){
-                playSound('upgrade')
+            if (lastTerminalEntry.message.includes('DEPOSIT')) {
+                playSound('deposit');
+            } else if (lastTerminalEntry.message.includes('WITHDRAW')) {
+                playSound('withdraw');
+            } else if (lastTerminalEntry.message.includes('SUBMIT')) {
+                playSound('submit');
+            } else if (lastTerminalEntry.message.includes('UPGRADE')) {
+                playSound('upgrade');
             }
-                
 
             setTerminalEntries((prevEntries) => {
                 // Add new entry to the array
@@ -100,39 +101,39 @@ function GamePage() {
 
     // ----------- ENABLED ------------------------
     const depositEnabled = !isLoading && gameAccount !== null;
-    const withdrawEnabled = !isLoading && gameAccount !== null && clickerAccount !== null && clickerAccount.points.toNumber() > 0;
+    const withdrawEnabled =
+        !isLoading && gameAccount !== null && clickerAccount !== null && clickerAccount.points.toNumber() > 0;
     const clickEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
     const upgradeEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
-    const submitEnabled = !isLoading && gameAccount !== null && clickerAccount !== null && clickerAccount.points.toNumber() > 0;
+    const submitEnabled =
+        !isLoading && gameAccount !== null && clickerAccount !== null && clickerAccount.points.toNumber() > 0;
 
     // ----------- COINS FOR CONFETTI ------------------------
     let coinsForConfetti = 0;
-    if(clickerAccount){
+    if (clickerAccount) {
         coinsForConfetti = clickerAccount.points.toNumber();
     }
-    if(tokenBalance){
+    if (tokenBalance) {
         coinsForConfetti += tokenBalance;
     }
 
     // ----------- FUNCTIONS ------------------------
 
- 
-
-    const playSound = (id: "click" | "upgrade" | "deposit" | "withdraw" | "submit" | "coin") => {
-        stop('coin')
-        stop('click')
-        stop('upgrade')
-        stop('deposit')
-        stop('withdraw')
-        stop('submit')
-        play({id});
-    }
+    const playSound = (id: 'click' | 'upgrade' | 'deposit' | 'withdraw' | 'submit' | 'coin') => {
+        stop('coin');
+        stop('click');
+        stop('upgrade');
+        stop('deposit');
+        stop('withdraw');
+        stop('submit');
+        play({ id });
+    };
 
     const handleDeposit = async () => {
-        if (depositEnabled){
-            playSound("click")
+        if (depositEnabled) {
+            playSound('click');
             gameDeposit();
-        } 
+        }
     };
 
     const handleClick = async () => {
@@ -150,22 +151,22 @@ function GamePage() {
     };
 
     const handleUpgrade = async (index: number) => {
-        if (upgradeEnabled){
-            playSound("click")
+        if (upgradeEnabled) {
+            playSound('click');
             clickerUpgrade(index);
-        } 
+        }
     };
 
     const handleWithdraw = async () => {
         if (withdrawEnabled) {
-            playSound("click")
+            playSound('click');
             gameWithdraw();
         }
     };
 
     const handleSubmit = async () => {
-        if (submitEnabled){
-            playSound("click")
+        if (submitEnabled) {
+            playSound('click');
             gameSubmit();
         }
     };
@@ -187,7 +188,7 @@ function GamePage() {
                 ) : (
                     <h1 className="text-2xl mb-4 text-center">Deposit To Start</h1>
                 )}
-                <div className='sinewave-animation'>
+                <div className="sinewave-animation">
                     <img
                         onClick={handleClick}
                         src="https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/coin-lg.png"
@@ -240,9 +241,15 @@ function GamePage() {
                         </button>
                     </div>
                     <div className="h-[50%] flex justify-around items-center mt-3 text-stone-500">
-                        <p data-tooltip-id={TooltipIds.playerBalance} className="text-center">Player: ◎ {playerBalance?.toFixed(6) ?? 'X'}</p>
-                        <p data-tooltip-id={TooltipIds.walletCoins} className="text-center">Wallet Coins: {tokenBalance?.toFixed(0) ?? 'X'}</p>
-                        <p data-tooltip-id={TooltipIds.walletBalance} className="text-center">Wallet: ◎ {walletBalance?.toFixed(6) ?? 'X'}</p>
+                        <p data-tooltip-id={TooltipIds.playerBalance} className="text-center">
+                            Player: ◎ {playerBalance?.toFixed(6) ?? 'X'}
+                        </p>
+                        <p data-tooltip-id={TooltipIds.walletCoins} className="text-center">
+                            Wallet Coins: {tokenBalance?.toFixed(0) ?? 'X'}
+                        </p>
+                        <p data-tooltip-id={TooltipIds.walletBalance} className="text-center">
+                            Wallet: ◎ {walletBalance?.toFixed(6) ?? 'X'}
+                        </p>
                     </div>
                 </div>
 
@@ -250,7 +257,6 @@ function GamePage() {
                 <div className="flex justify-center items-center min-w-fit">
                     <WalletMultiButton />
                 </div>
-
             </div>
         );
     };
@@ -259,16 +265,23 @@ function GamePage() {
         return (
             <div className="h-full w-full grid grid-cols-4 grid-rows-2 gap-4">
                 {UPGRADES.map((upgrade, i) => {
-
                     const ownedAmount = clickerAccount ? clickerAccount.clickerUpgrades[i] : 0;
                     const owned: string = clickerAccount ? formatNumber(clickerAccount.clickerUpgrades[i]) : 'X';
                     const cost: number = clickerAccount
                         ? getNextCost(upgrade.baseCost, clickerAccount.clickerUpgrades[i])
                         : upgrade.baseCost;
                     const costString = formatNumber(cost);
-                    const buyEnabled: boolean = clickerAccount ? clickerAccount.points.toNumber() >= cost && upgradeEnabled : false;
-                    const shouldShow: boolean = clickerAccount ? clickerAccount.clickerUpgrades[i] > 0 || buyEnabled : false;
-                    const tooltipId = shouldShow ? (TooltipIds.upgrade + i) : (i > 3 ? TooltipIds.upgradeNotUnlockedBottom : TooltipIds.upgradeNotUnlocked);
+                    const buyEnabled: boolean = clickerAccount
+                        ? clickerAccount.points.toNumber() >= cost && upgradeEnabled
+                        : false;
+                    const shouldShow: boolean = clickerAccount
+                        ? clickerAccount.clickerUpgrades[i] > 0 || buyEnabled
+                        : false;
+                    const tooltipId = shouldShow
+                        ? TooltipIds.upgrade + i
+                        : i > 3
+                        ? TooltipIds.upgradeNotUnlockedBottom
+                        : TooltipIds.upgradeNotUnlocked;
 
                     return (
                         <div
@@ -284,24 +297,27 @@ function GamePage() {
                                 className={`shadow-lg font-mono w-full h-full backdrop-filter backdrop-blur cursor-pointer ${
                                     buyEnabled
                                         ? 'bg-black bg-opacity-60 hover:bg-opacity-30 hover:backdrop-blur-none'
-                                        : (shouldShow ? 'bg-black bg-opacity-70 backdrop-blur text-stone-500 cursor-not-allowed':'bg-black bg-opacity-95 backdrop-blur text-stone-500 cursor-not-allowed')
+                                        : shouldShow
+                                        ? 'bg-black bg-opacity-70 backdrop-blur text-stone-500 cursor-not-allowed'
+                                        : 'bg-black bg-opacity-95 backdrop-blur text-stone-500 cursor-not-allowed'
                                 } `}
                             >
                                 <div className="p-4 flex flex-col justify-between h-full">
                                     <div>
-                                        <h2 className="font-bold">{shouldShow ? upgrade.name : `Unlock at ${costString}`}</h2>
+                                        <h2 className="font-bold">
+                                            {shouldShow ? upgrade.name : `Unlock at ${costString}`}
+                                        </h2>
                                     </div>
                                     {shouldShow ? (
-                                    <div>
-                                    <p className="">Cost: -{costString}</p>
-                                    <p className="">
-                                        CpS: +{formatNumber(upgrade.coinPerUpgrade)} ({' '}
-                                        {formatNumber(ownedAmount * upgrade.coinPerUpgrade)} )
-                                    </p>
-                                    <p className="">Owned: {owned}</p>
-                                </div>
+                                        <div>
+                                            <p className="">Cost: -{costString}</p>
+                                            <p className="">
+                                                CpS: +{formatNumber(upgrade.coinPerUpgrade)} ({' '}
+                                                {formatNumber(ownedAmount * upgrade.coinPerUpgrade)} )
+                                            </p>
+                                            <p className="">Owned: {owned}</p>
+                                        </div>
                                     ) : null}
-
                                 </div>
                             </div>
                         </div>
@@ -331,21 +347,19 @@ function GamePage() {
     const renderLeaderboardSection = () => {
         return (
             <div className="font-mono bg-solana-black text-solana-light rounded shadow p-4 h-full overflow-auto">
-                <h1 data-tooltip-id={TooltipIds.leaderboard} className="text-2xl font-bold mb-2 text-center">LEADERBOARD</h1>
+                <h1 data-tooltip-id={TooltipIds.leaderboard} className="text-2xl font-bold mb-2 text-center">
+                    LEADERBOARD
+                </h1>
                 <div>
-                {leaderboardEntries.map((player, index) => (
-    <div key={index} className="flex justify-between">
-        <div className="flex">
-            <span style={{width: '30px', textAlign: 'left'}}>
-                {index + 1}.
-            </span>
-            <span style={{marginLeft: '10px'}}>
-                {player.name}
-            </span>
-        </div>
-        <span>{player.coins}</span>
-    </div>
-))}
+                    {leaderboardEntries.map((player, index) => (
+                        <div key={index} className="flex justify-between">
+                            <div className="flex">
+                                <span style={{ width: '30px', textAlign: 'left' }}>{index + 1}.</span>
+                                <span style={{ marginLeft: '10px' }}>{player.name}</span>
+                            </div>
+                            <span>{player.coins}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
         );
@@ -366,13 +380,11 @@ function GamePage() {
 
     // ----------- PAGE ------------------------
 
-
-
     return (
         <div className="font-mono w-screen h-screen flex text-solana-light -z-20">
             {renderSocials()}
-            <Tooltips shouldShow={!isLoading}/>
-            <ConfettiArea coins={coinsForConfetti}/>
+            <Tooltips shouldShow={!isLoading} />
+            <ConfettiArea coins={coinsForConfetti} />
 
             <div className="w-1/3 h-full flex items-center justify-center p-8 flex-col">{renderClickerSection()}</div>
             <div className="w-2/3 h-full flex flex-col p-4">
