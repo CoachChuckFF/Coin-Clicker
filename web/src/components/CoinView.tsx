@@ -29,7 +29,7 @@ export const CoinView = (props: CoinViewProps) => {
     return (
         <>
 
-            <h1 className="text-2xl mb-1 text-center">Coins {formatNumber(coins)} ← ( {formatNumber(accumulatedCoins)} )</h1>
+            <h1 className="text-2xl mb-1 text-center ">Coins {formatNumber(coins)} ← ( {formatNumber(accumulatedCoins)} )</h1>
             <p className="text-sm mb-5 text-center">Total CpS {cps}</p>
         </>
     );

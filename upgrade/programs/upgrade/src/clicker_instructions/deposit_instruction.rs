@@ -86,13 +86,16 @@ pub fn run_deposit(ctx: Context<Deposit>) -> Result<()> {
             clicker.owner = ctx.accounts.owner.key().clone();
             clicker.game = ctx.accounts.game.key().clone();
         
-            clicker.points = amount_to_burn + 1; 
+            clicker.points = amount_to_burn.saturating_add(1); 
             clicker.game_flags = 0;
             clicker.clicker_modifiers = [0; 16];
             clicker.clicker_upgrades = [0; 16];
             clicker.date_created = now;
-            clicker.last_updated = now;
+        } else {
+            clicker.points = clicker.points.saturating_add(amount_to_burn.saturating_add(1)) ; 
         }
+
+        clicker.last_updated = now;
     }
 
 

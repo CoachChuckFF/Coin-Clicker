@@ -25,8 +25,9 @@ const SolanaProvider: FC<{ children: ReactNode }> = ({ children }) => {
         }
     }, []);
 
+
     return (
-        <ConnectionProvider endpoint={endpoint}>
+        <ConnectionProvider endpoint={endpoint} config={{commitment: 'singleGossip'}}>
             <WalletProvider wallets={wallets} autoConnect>
                 <WalletModalProvider>{children}</WalletModalProvider>
             </WalletProvider>

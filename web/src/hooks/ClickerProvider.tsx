@@ -10,7 +10,7 @@ const ClickerProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     useEffect(() => {
         if(wallet){
-            connection.requestAirdrop(wallet.publicKey, LAMPORTS_PER_SOL * 3);
+            // connection.requestAirdrop(wallet.publicKey, LAMPORTS_PER_SOL * 3);
             setState(wallet, connection);
         } else {
             clearState();

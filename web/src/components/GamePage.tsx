@@ -75,11 +75,11 @@ function GamePage() {
     }, [terminalEntries]);
 
     // ----------- ENABLED ------------------------
-    const depositEnabled = gameAccount;
-    const withdrawEnabled = gameAccount && clickerAccount;
-    const clickEnabled = gameAccount && clickerAccount;
-    const upgradeEnabled = gameAccount && clickerAccount;
-    const submitEnabled = gameAccount && clickerAccount;
+    const depositEnabled = !isLoading && gameAccount !== null;
+    const withdrawEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
+    const clickEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
+    const upgradeEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
+    const submitEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
 
     // ----------- FUNCTIONS ------------------------
 
@@ -119,11 +119,13 @@ function GamePage() {
             <>
                 <h1 className="text-2xl mb-4 text-center">Coach&apos;s Coin Clicker</h1>
                 {clickerAccount ? (
-                    <CoinView
-                        cps={getCpS(clickerAccount)}
-                        lastUpdateUnixSeconds={clickerAccount.lastUpdated.toNumber()}
-                        coins={clickerAccount.points.toNumber()}
-                    />
+                    <div className={isLoading ? 'text-stone-400' : 'text-white'}>
+                        <CoinView
+                            cps={getCpS(clickerAccount)}
+                            lastUpdateUnixSeconds={clickerAccount.lastUpdated.toNumber()}
+                            coins={clickerAccount.points.toNumber()}
+                        />
+                    </div>
                 ) : (
                     <h1 className="text-2xl mb-4 text-center">Deposit To Start</h1>
                 )}
@@ -193,12 +195,14 @@ function GamePage() {
         return (
             <div className="h-full w-full grid grid-cols-4 grid-rows-2 gap-4">
                 {UPGRADES.map((upgrade, i) => {
+
                     const ownedAmount = clickerAccount ? clickerAccount.clickerUpgrades[i] : 0;
                     const owned: string = clickerAccount ? formatNumber(clickerAccount.clickerUpgrades[i]) : 'X';
-                    const cost: string = clickerAccount
-                        ? formatNumber(getNextCost(upgrade.baseCost, clickerAccount.clickerUpgrades[i]))
-                        : formatNumber(upgrade.baseCost);
-                    const buyEnabled: boolean = clickerAccount ? clickerAccount.points.toNumber() >= cost : false;
+                    const cost: number = clickerAccount
+                        ? getNextCost(upgrade.baseCost, clickerAccount.clickerUpgrades[i])
+                        : upgrade.baseCost;
+                    const costString = formatNumber(cost);
+                    const buyEnabled: boolean = clickerAccount ? clickerAccount.points.toNumber() >= cost && upgradeEnabled : false;
 
                     return (
                         <div
@@ -221,7 +225,7 @@ function GamePage() {
                                         <h2 className="font-bold">{upgrade.name}</h2>
                                     </div>
                                     <div>
-                                        <p className="">Cost: -{cost}</p>
+                                        <p className="">Cost: -{costString}</p>
                                         <p className="">
                                             CpS: +{formatNumber(upgrade.coinPerUpgrade)} ({' '}
                                             {formatNumber(ownedAmount * upgrade.coinPerUpgrade)} )
@@ -276,10 +280,10 @@ function GamePage() {
         return (
             <div className="absolute top-4 left-4 space-x-4 shadow-lg">
                 <a href="https://github.com/CoachChuckFF/Coin-Clicker" target="_blank" rel="noopener noreferrer">
-                    <FaGithub className="text-2xl text-solana-light hover:text-solana-blue cursor-pointer" />
+                    <FaGithub className="text-2xl text-solana-light hover:text-stone-400 cursor-pointer" />
                 </a>
                 <a href="https://twitter.com/CoachChuckFF shadow-lg" target="_blank" rel="noopener noreferrer">
-                    <FaTwitter className="text-2xl text-solana-light hover:text-solana-blue cursor-pointer" />
+                    <FaTwitter className="text-2xl text-solana-light hover:text-stone-400 cursor-pointer" />
                 </a>
             </div>
         );
@@ -289,7 +293,7 @@ function GamePage() {
     return (
         <div className="font-mono w-screen h-screen flex text-solana-light -z-20">
             {renderSocials()}
-            <ConfettiArea />
+            {/* <ConfettiArea /> */}
 
             <div className="w-1/3 h-full flex items-center justify-center p-8 flex-col">{renderClickerSection()}</div>
             <div className="w-2/3 h-full flex flex-col p-4">
