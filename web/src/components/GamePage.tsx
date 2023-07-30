@@ -10,6 +10,7 @@ import CoinView from './CoinView';
 import { Tooltip } from 'react-tooltip';
 import { TooltipIds, Tooltips } from './Tooltips';
 import useSound from 'use-sound';
+import ConfettiArea from './Confetti';
 
 function GamePage() {
     // ----------- STATE ------------------------
@@ -271,10 +272,10 @@ function GamePage() {
                             style={{ backgroundImage: `url(${upgrade.image})`, backgroundSize: 'cover' }}
                         >
                             <div
-                                className={`shadow-lg font-mono w-full h-full bg-black bg-opacity-75 backdrop-filter backdrop-blur cursor-pointer ${
+                                className={`shadow-lg font-mono w-full h-full backdrop-filter backdrop-blur cursor-pointer ${
                                     buyEnabled
-                                        ? 'bg-black bg-opacity-50 hover:backdrop-blur-none'
-                                        : (shouldShow ? 'bg-opacity-70 backdrop-blur text-stone-500 cursor-not-allowed':'bg-opacity-95 backdrop-blur text-stone-500 cursor-not-allowed')
+                                        ? 'bg-black bg-opacity-60 hover:bg-opacity-30 hover:backdrop-blur-none'
+                                        : (shouldShow ? 'bg-black bg-opacity-70 backdrop-blur text-stone-500 cursor-not-allowed':'bg-black bg-opacity-95 backdrop-blur text-stone-500 cursor-not-allowed')
                                 } `}
                             >
                                 <div className="p-4 flex flex-col justify-between h-full">
@@ -354,6 +355,7 @@ function GamePage() {
         <div className="font-mono w-screen h-screen flex text-solana-light -z-20">
             {renderSocials()}
             <Tooltips shouldShow={!isLoading}/>
+            <ConfettiArea />
 
             <div className="w-1/3 h-full flex items-center justify-center p-8 flex-col">{renderClickerSection()}</div>
             <div className="w-2/3 h-full flex flex-col p-4">
