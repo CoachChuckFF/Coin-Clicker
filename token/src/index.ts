@@ -3,37 +3,21 @@ import * as web3 from "@solana/web3.js"
 import * as token from "@solana/spl-token"
 import { Metaplex, keypairIdentity } from "@metaplex-foundation/js";
 import { DataV2, createCreateMetadataAccountV3Instruction } from "@metaplex-foundation/mpl-token-metadata";
-
-// ------------------ CONFIG --------------------------------------
-
-const IS_DEVNET = true; // Set to false if you use `amman start`
-const RPC_URL = IS_DEVNET ? web3.clusterApiUrl('devnet') : 'http://127.0.0.1:8899';
-
-// ------------------ HELPERS --------------------------------------
-
-type LINK_TYPE = 'tx' | 'address';
-function printLink(type: LINK_TYPE, data: string | web3.PublicKey){
-    return `https://amman-explorer.metaplex.com/#/${type}/${data.toString()}${IS_DEVNET ? '?cluster=devnet' : ''}`;
-}
-
-async function keypress(){
-    console.log('\nPress a key to continue...')
-    process.stdin.setRawMode(true)
-    return new Promise<void>(resolve => process.stdin.once('data', () => {
-      process.stdin.setRawMode(false)
-      resolve()
-    }))
-  }
-
+import { CLICKER_PROGRAM_ID, getClickerProgram } from "./clicker";
+import { AnchorProvider, Program } from "@coral-xyz/anchor";
+import { IDL, Upgrade } from "./upgrade";
+import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 
 // ------------------ MAIN --------------------------------------
 
 async function main() {
     // Talk about RPC Url and Commitment
-    const connection = new web3.Connection(RPC_URL);
+    const connection = new web3.Connection(process.env.RPC as string);
     const myWallet = await initializeKeypair(connection);
     const metaplex = Metaplex.make(connection)
     .use(keypairIdentity(myWallet))
+
+    const program = await getClickerProgram(myWallet, connection);
 
     const mintKeypair = web3.Keypair.generate();
     console.log(`Mint Keypair: [${mintKeypair.secretKey.toString()}]`);
@@ -85,9 +69,30 @@ async function main() {
         [myWallet]
       )
 
-    console.log("metadata ", printLink('tx', transactionSignature))
-    console.log("metadata account", printLink('address', metadataAccount))
-    
+      // GAME STUFF
+
+      const [game, gameBump] = web3.PublicKey.findProgramAddressSync(
+        [Buffer.from("GAME"), mintKeypair.publicKey.toBuffer()],
+        program.programId
+      );
+      
+      await program.methods
+        .create(
+          gameBump,
+        )
+        .accounts({
+          game: game,
+          owner: myWallet.publicKey,
+          mint: mintKeypair.publicKey,
+          tokenProgram: token.TOKEN_PROGRAM_ID,
+          systemProgram: web3.SystemProgram.programId,
+          rent: web3.SYSVAR_RENT_PUBKEY,
+        })
+        .rpc();
+
+        console.log("Game: " + game.toString());
+        console.log("Mint: " + mintKeypair.publicKey.toString());
+        console.log(`Mint Keypair: [${mintKeypair.secretKey.toString()}]`);      
 }
 
 main()
