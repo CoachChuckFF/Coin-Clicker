@@ -21,6 +21,7 @@ function GamePage() {
         isLoading,
         clickerAccount,
         lastTerminalEntry,
+        connection,
         gameWithdraw,
         gameDeposit,
         clickerClick,
