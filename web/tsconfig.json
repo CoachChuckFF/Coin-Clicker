@@ -2,6 +2,7 @@
     "extends": "./tsconfig.root.json",
     "include": ["src"],
     "compilerOptions": {
+        "noImplicitAny": false,
         "outDir": "lib",
         "target": "es5",
         "lib": ["dom", "dom.iterable", "esnext"],

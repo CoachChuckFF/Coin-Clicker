@@ -6,6 +6,18 @@ body {
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@keyframes sinewave {
+    0% { transform: translate(0, 0); }
+    /* 25% { transform: translate(0, 10px); } */
+    50% { transform: translate(0, -20px); }
+    /* 75% { transform: translate(0, -10px); } */
+    100% { transform: translate(0, 0); }
+  }
+  
+  .sinewave-animation {
+    animation: sinewave 5s infinite ease-in-out;
+  }
+
 .scale-reg {
     transition: transform 0.3s;
     transform: scale(1);

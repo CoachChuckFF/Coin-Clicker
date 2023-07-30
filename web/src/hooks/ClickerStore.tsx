@@ -205,7 +205,7 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
                     lastTerminalEntry: {
                         type: TerminalColor.system,
                         timestamp: Date.now(),
-                        message:'Game on! Your Clicker account is now ready to go!',
+                        message:'DEPOSIT: Game on! Your Clicker account is now ready to go!',
                     }
 
                 })
@@ -244,7 +244,7 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
                     lastTerminalEntry: {
                         type: TerminalColor.system,
                         timestamp: Date.now(),
-                        message:'Your Coins are now safe in your wallet! Just re-deposit to keep',
+                        message:'WITHDRAW: Your Coins are now safe in your wallet! Just re-deposit to keep',
                     }
 
                 })
@@ -291,7 +291,7 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
                         lastTerminalEntry: {
                             type: TerminalColor.system,
                             timestamp: Date.now(),
-                            message:'You have submitted your Coins to the leaderboard! Good job! Note - this means your account no logner exists - think of it like prestiging',
+                            message:'SUBMIT: You have submitted your Coins to the leaderboard! Good job! Note - this means your account no logner exists - think of it like prestiging',
                         }
     
                     })
@@ -346,7 +346,7 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
                     lastTerminalEntry: {
                         type: TerminalColor.normal,
                         timestamp: Date.now(),
-                        message:`+${formatNumber(newClickerAccount.points.toNumber() - lastCoins)} coin(s)`,
+                        message:`CLICK: +${formatNumber(newClickerAccount.points.toNumber() - lastCoins)} coin(s)`,
                     }
 
                 })
@@ -381,7 +381,7 @@ export const createAppStateSlice: StateCreator<CombinedState, [], [], AppSlice> 
                     lastTerminalEntry: {
                         type: TerminalColor.normal,
                         timestamp: Date.now(),
-                        message:`+1 ${UPGRADES[upgrade].name} +${UPGRADES[upgrade].coinPerUpgrade} CpS`,
+                        message:`UPGRADE: +1 ${UPGRADES[upgrade].name} +${UPGRADES[upgrade].coinPerUpgrade} CpS`,
                     }
 
                 })

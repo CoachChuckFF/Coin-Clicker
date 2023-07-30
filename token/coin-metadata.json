@@ -1,6 +1,7 @@
 {
     "name": "Coin",
     "symbol": "CC",
-    "description": "Coin from the Coin Clicker game! Use it to buy upgrades and get more coins!",
-    "image": "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/coin-lg.png"
+    "description": "Click the coin, buy upgrade, and get yourself on the leaderboard! ( Or keep the Coins to yourself! )",
+    "image": "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/coin-lg.png",
+    "external_url": "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html"
   }

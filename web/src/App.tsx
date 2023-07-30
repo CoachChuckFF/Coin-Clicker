@@ -6,6 +6,8 @@ import Loader from './components/Loader';
 
 require('./App.css');
 require('@solana/wallet-adapter-react-ui/styles.css');
+require('react-tooltip/dist/react-tooltip.css');
+
 
 const LargeApp = React.lazy(() => import('./components/LoadedApp'));
 

@@ -7,7 +7,9 @@ import { STARTING_ENTRIES, TerminalEntry } from '../models/terminal';
 import { LeaderboardEntry } from '../models/leaderboard';
 import { formatNumber } from '../controllers/helpers';
 import CoinView from './CoinView';
-import ConfettiArea from './Confetti';
+import { Tooltip } from 'react-tooltip';
+import { TooltipIds, Tooltips } from './Tooltips';
+import useSound from 'use-sound';
 
 function GamePage() {
     // ----------- STATE ------------------------
@@ -16,12 +18,21 @@ function GamePage() {
     const [terminalEntries, setTerminalEntries] = useState<TerminalEntry[]>(STARTING_ENTRIES);
     const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>([]);
     const terminalRef = useRef<HTMLDivElement>(null);
+    const [play, {stop}] = useSound("https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/clicker-sounds.mp3", {
+        sprite: {
+            "coin": [0, 366],
+            "upgrade": [366, 1079],
+            "deposit": [1445, 440],
+            "withdraw": [1858, 3576],
+            "submit": [5434, 4704],
+            "click": [10138, 348]
+        }
+    });
 
     const {
         isLoading,
         clickerAccount,
         lastTerminalEntry,
-        connection,
         gameWithdraw,
         gameDeposit,
         clickerClick,
@@ -56,6 +67,18 @@ function GamePage() {
 
     useEffect(() => {
         if (lastTerminalEntry) {
+
+            if(lastTerminalEntry.message.includes("DEPOSIT")){
+                playSound('deposit')
+            } else if(lastTerminalEntry.message.includes("WITHDRAW")){
+                playSound('withdraw')
+            } else if(lastTerminalEntry.message.includes("SUBMIT")){
+                playSound('submit')
+            } else if(lastTerminalEntry.message.includes("UPGRADE")){
+                playSound('upgrade')
+            }
+                
+
             setTerminalEntries((prevEntries) => {
                 // Add new entry to the array
                 const newEntries = [...prevEntries, lastTerminalEntry];
@@ -83,13 +106,29 @@ function GamePage() {
 
     // ----------- FUNCTIONS ------------------------
 
+ 
+
+    const playSound = (id: "click" | "upgrade" | "deposit" | "withdraw" | "submit" | "coin") => {
+        stop('coin')
+        stop('click')
+        stop('upgrade')
+        stop('deposit')
+        stop('withdraw')
+        stop('submit')
+        play({id});
+    }
+
     const handleDeposit = async () => {
-        if (depositEnabled) gameDeposit();
+        if (depositEnabled){
+            playSound("click")
+            gameDeposit();
+        } 
     };
 
     const handleClick = async () => {
         if (!coinClicked && !isLoading) {
             setCoinClicked(true);
+            playSound('coin');
             setTimeout(() => setCoinClicked(false), 100); // Set the duration of the pop effect here
         }
 
@@ -101,15 +140,24 @@ function GamePage() {
     };
 
     const handleUpgrade = async (index: number) => {
-        if (upgradeEnabled) clickerUpgrade(index);
+        if (upgradeEnabled){
+            playSound("click")
+            clickerUpgrade(index);
+        } 
     };
 
     const handleWithdraw = async () => {
-        if (withdrawEnabled) gameWithdraw();
+        if (withdrawEnabled) {
+            playSound("click")
+            gameWithdraw();
+        }
     };
 
     const handleSubmit = async () => {
-        if (submitEnabled) gameSubmit();
+        if (submitEnabled){
+            playSound("click")
+            gameSubmit();
+        }
     };
 
     // ----------- RENDERERS ------------------------
@@ -129,12 +177,14 @@ function GamePage() {
                 ) : (
                     <h1 className="text-2xl mb-4 text-center">Deposit To Start</h1>
                 )}
-                <img
-                    onClick={handleClick}
-                    src="https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/coin-lg.png"
-                    alt="Placeholder Image"
-                    className={`object-contain w-full cursor-pointer ${coinClicked ? 'scale-lg' : 'scale-reg'}`}
-                />
+                <div className='sinewave-animation'>
+                    <img
+                        onClick={handleClick}
+                        src="https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/coin-lg.png"
+                        alt="Placeholder Image"
+                        className={`object-contain w-full cursor-pointer ${coinClicked ? 'scale-lg' : 'scale-reg'}`}
+                    />
+                </div>
             </>
         );
     };
@@ -146,6 +196,7 @@ function GamePage() {
                 <div className="w-full flex flex-col">
                     <div className="h-[50%] flex justify-around items-center">
                         <button
+                            data-tooltip-id={TooltipIds.deposit}
                             onClick={handleDeposit}
                             className={`w-full py-2 mx-3 text-center rounded cursor-pointer ${
                                 depositEnabled
@@ -156,6 +207,7 @@ function GamePage() {
                             &#9608; Deposit ◎ 0.01
                         </button>
                         <button
+                            data-tooltip-id={TooltipIds.withdraw}
                             onClick={handleWithdraw}
                             className={`w-full font-bold py-2 mx-3 text-center rounded cursor-pointer ${
                                 withdrawEnabled
@@ -166,6 +218,7 @@ function GamePage() {
                             &#9608; Withdraw
                         </button>
                         <button
+                            data-tooltip-id={'submit'}
                             onClick={handleSubmit}
                             className={`w-full font-bold py-2 mx-3 text-center rounded cursor-pointer ${
                                 submitEnabled
@@ -177,9 +230,9 @@ function GamePage() {
                         </button>
                     </div>
                     <div className="h-[50%] flex justify-around items-center mt-3 text-stone-500">
-                        <p className="text-center">Player: ◎ {playerBalance?.toFixed(6) ?? 'X'}</p>
-                        <p className="text-center">Wallet Coins: {tokenBalance?.toFixed(0) ?? 'X'}</p>
-                        <p className="text-center">Wallet: ◎ {walletBalance?.toFixed(6) ?? 'X'}</p>
+                        <p data-tooltip-id={TooltipIds.playerBalance} className="text-center">Player: ◎ {playerBalance?.toFixed(6) ?? 'X'}</p>
+                        <p data-tooltip-id={TooltipIds.walletCoins} className="text-center">Wallet Coins: {tokenBalance?.toFixed(0) ?? 'X'}</p>
+                        <p data-tooltip-id={TooltipIds.walletBalance} className="text-center">Wallet: ◎ {walletBalance?.toFixed(6) ?? 'X'}</p>
                     </div>
                 </div>
 
@@ -187,6 +240,7 @@ function GamePage() {
                 <div className="flex justify-center items-center min-w-fit">
                     <WalletMultiButton />
                 </div>
+
             </div>
         );
     };
@@ -203,10 +257,13 @@ function GamePage() {
                         : upgrade.baseCost;
                     const costString = formatNumber(cost);
                     const buyEnabled: boolean = clickerAccount ? clickerAccount.points.toNumber() >= cost && upgradeEnabled : false;
+                    const shouldShow: boolean = clickerAccount ? clickerAccount.clickerUpgrades[i] > 0 || buyEnabled : false;
+                    const tooltipId = shouldShow ? (TooltipIds.upgrade + i) : (i > 3 ? TooltipIds.upgradeNotUnlockedBottom : TooltipIds.upgradeNotUnlocked);
 
                     return (
                         <div
-                            key={i}
+                            key={i + tooltipId}
+                            data-tooltip-id={tooltipId}
                             onClick={() => {
                                 if (buyEnabled) handleUpgrade(i);
                             }}
@@ -216,22 +273,25 @@ function GamePage() {
                             <div
                                 className={`shadow-lg font-mono w-full h-full bg-black bg-opacity-75 backdrop-filter backdrop-blur cursor-pointer ${
                                     buyEnabled
-                                        ? 'bg-black bg-opacity-60 hover:backdrop-blur-none'
-                                        : 'bg-opacity-85 backdrop-blur text-stone-500 cursor-not-allowed'
+                                        ? 'bg-black bg-opacity-50 hover:backdrop-blur-none'
+                                        : (shouldShow ? 'bg-opacity-70 backdrop-blur text-stone-500 cursor-not-allowed':'bg-opacity-95 backdrop-blur text-stone-500 cursor-not-allowed')
                                 } `}
                             >
                                 <div className="p-4 flex flex-col justify-between h-full">
                                     <div>
-                                        <h2 className="font-bold">{upgrade.name}</h2>
+                                        <h2 className="font-bold">{shouldShow ? upgrade.name : `Unlock at ${costString} coins`}</h2>
                                     </div>
+                                    {shouldShow ? (
                                     <div>
-                                        <p className="">Cost: -{costString}</p>
-                                        <p className="">
-                                            CpS: +{formatNumber(upgrade.coinPerUpgrade)} ({' '}
-                                            {formatNumber(ownedAmount * upgrade.coinPerUpgrade)} )
-                                        </p>
-                                        <p className="">Owned: {owned}</p>
-                                    </div>
+                                    <p className="">Cost: -{costString}</p>
+                                    <p className="">
+                                        CpS: +{formatNumber(upgrade.coinPerUpgrade)} ({' '}
+                                        {formatNumber(ownedAmount * upgrade.coinPerUpgrade)} )
+                                    </p>
+                                    <p className="">Owned: {owned}</p>
+                                </div>
+                                    ) : null}
+
                                 </div>
                             </div>
                         </div>
@@ -293,7 +353,7 @@ function GamePage() {
     return (
         <div className="font-mono w-screen h-screen flex text-solana-light -z-20">
             {renderSocials()}
-            {/* <ConfettiArea /> */}
+            <Tooltips shouldShow={!isLoading}/>
 
             <div className="w-1/3 h-full flex items-center justify-center p-8 flex-col">{renderClickerSection()}</div>
             <div className="w-2/3 h-full flex flex-col p-4">
