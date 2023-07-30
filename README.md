@@ -6,7 +6,7 @@ I am entering in the Fully On-Chain catagory!
 
 And when I say *Fully* On-Chain, I mean it! Backend is written in Solana, Frontend is stored on ShadowDrive - It's truly a perma-dapp!
 
-Go play it now! [HERE](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html)
+Go play it now! [HERE](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html) or [coinclicker.xyz](coinclicker.xyz)
 
 You can even provide your RPC if you'd like! Just add in the `?rpc=` with your [encoded](https://www.urlencoder.org/) rpc url!
 
