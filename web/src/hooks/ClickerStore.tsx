@@ -1,8 +1,8 @@
 import { AnchorWallet } from '@solana/wallet-adapter-react';
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
-import { Program, AnchorProvider, BN } from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
 import { StateCreator, create } from 'zustand';
-import { CLICKER_GAME_KEY, CLICKER_PROGRAM_ID, ClickerStruct, GameStruct, clickClickerAccount, depositClickerAccount, fetchClickerAccount, fetchGameAccount, getClickerKey, getClickerProgram, getClickerTokenKey, submitClickerAccount, upgradeClickerAccount, withdrawClickerAccount } from '../controllers/clickerProgram';
+import { CLICKER_GAME_KEY, ClickerStruct, GameStruct, clickClickerAccount, depositClickerAccount, fetchClickerAccount, fetchGameAccount, getClickerKey, getClickerProgram, getClickerTokenKey, submitClickerAccount, upgradeClickerAccount, withdrawClickerAccount } from '../controllers/clickerProgram';
 import { IDL, Upgrade } from '../controllers/idl/upgrade';
 import { grabLocalKeypair } from '../controllers/storage';
 import { TerminalColor, TerminalEntry } from '../models/terminal';

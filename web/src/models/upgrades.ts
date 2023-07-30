@@ -14,7 +14,7 @@ export const UPGRADES: UpgradeType[] = [
     {
         name: "Sea Rovers",
         description: "",
-        image: "https://arweave.net/htWyvQeoaciETL3n1BZE8xWV-hhWnY-4znXhk2ZsfAo",
+        image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/sea-rovers.png",
     
         upgradeIndex: 0,
         baseCost: 15,
@@ -23,7 +23,7 @@ export const UPGRADES: UpgradeType[] = [
     {
         name: "Fractals",
         description: "",
-        image: "https://storage.googleapis.com/fractal-launchpad-public-assets/fractals/img/hexa_010.jpg",
+        image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/fractals.jpeg",
 
         upgradeIndex: 1,
         baseCost: 100,
@@ -32,8 +32,8 @@ export const UPGRADES: UpgradeType[] = [
     {
         name: "Pesky Penguins",
         description: "",
-        image: "https://cdn.pesky-penguins.com/artwork/7119-pixel.png",
-    
+        image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/pesky.png",
+     
         upgradeIndex: 2,
         baseCost: 1100,
         coinPerUpgrade: 8,
@@ -41,7 +41,7 @@ export const UPGRADES: UpgradeType[] = [
     {
         name: "Shadowy Super Coder",
         description: "",
-        image: "https://shdw-drive.genesysgo.net/8yHTE5Cz3hwcTdghynB2jgLuvKyRgKEz2n5XvSiXQabG/3779.png",
+        image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/ssc.png",
     
     
         upgradeIndex: 3,
@@ -52,7 +52,7 @@ export const UPGRADES: UpgradeType[] = [
 
         name: "NEC",
         description: "",
-        image: "https://shdw-drive.genesysgo.net/GWVKh2BgSu5ska9ADqhwfsjUrd23wHwNcg4if54NBJv/Crash%20Dummy.png",
+        image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/nec.png",
     
         upgradeIndex: 4,
         baseCost: 130_000,
@@ -61,7 +61,7 @@ export const UPGRADES: UpgradeType[] = [
     {
         name: "Claynos",
         description: "",
-        image: "https://nftstorage.link/ipfs/bafybeiacpd6pdpa2bpzm62kr3gtyvv7zyujv7fz63qyjporqwzbfgtfimm/4091.png",
+        image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/claynos.png",
     
         upgradeIndex: 5,
         baseCost: 1_400_000,
@@ -70,7 +70,7 @@ export const UPGRADES: UpgradeType[] = [
     {
         name: "Dronies",
         description: "",
-        image: "https://www.arweave.net/hurymaNA8AyoTUk_WS0iO5cxLs6kM1ZRneC29Xo-MRE?ext=png",
+        image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/dronies.png",
     
         upgradeIndex: 6,
         baseCost: 20_000_000,
@@ -79,7 +79,7 @@ export const UPGRADES: UpgradeType[] = [
     {
         name: "Coach",
         description: "",
-        image: "https://arweave.net/jh0zt1_LCkvhGWlzhDBArV1HoRhCQ-i9_FOtoN4zVVI?ext=png",
+        image: "https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/coach.png",
     
         upgradeIndex: 7,
         baseCost: 330_000_000,

@@ -1,7 +1,6 @@
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { FC, ReactNode, useEffect, } from 'react';
 import { useAppState } from './ClickerStore';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 const ClickerProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const wallet = useAnchorWallet();
