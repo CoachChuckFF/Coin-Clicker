@@ -355,7 +355,7 @@ function GamePage() {
         <div className="font-mono w-screen h-screen flex text-solana-light -z-20">
             {renderSocials()}
             <Tooltips shouldShow={!isLoading}/>
-            <ConfettiArea />
+            <ConfettiArea coins={(clickerAccount ? clickerAccount.points.toNumber() : 0)}/>
 
             <div className="w-1/3 h-full flex items-center justify-center p-8 flex-col">{renderClickerSection()}</div>
             <div className="w-2/3 h-full flex flex-col p-4">
