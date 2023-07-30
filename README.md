@@ -21,14 +21,28 @@ Hey there! Here is the Coin Clicker Solana game! It is basically Solana's versio
 
 I am entering in the Fully On-Chain category!
 
-And when I say *Fully* On-Chain, I mean it! Backend is written in Solana, Frontend is stored on ShadowDrive - It's truly a perma-dapp!
+And when I say *Fully* On-Chain, I mean it! Backend is written in Solana, Frontend is stored on ShadowDrive, and you can optionally provide your own RPC! - It's truly a perma-dapp!
 
 Go play it now! [HERE](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html) or [coinclicker.xyz](coinclicker.xyz)
 
-You can even provide your RPC if you'd like! Just add in the `?rpc=` with your [encoded](https://www.urlencoder.org/) rpc url!
+If you want to provide your own mainnet RPC; just add in the `?rpc=` with your [encoded](https://www.urlencoder.org/) mainnet rpc url!
 
 For Example:
 `https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html?rpc=https%3A%2F%2Fapi.mainnet-beta.solana.com`
+
+## Architecture
+- Wallet - this is the user's browser wallet
+- Player Wallet - Ephemeral wallet saved in local storage (***UNSAFE***) used to sign and pay transaction fees for the `Click` and `Upgrade` function calls
+- Game Account - This is a Public account that I made, it has mint authority over the Coin token as well as hosts the leaderboard
+- Clicker Account - This PDA is assigned to each user's Player Wallet - it keeps track of how many coins you have, and allows you to redeem your coins from your upgrades
+  
+The decision to keep the Player Wallet ephemeral was to allow the main game actions to be as seemless as possible. Local.storage is generally not a safe place for keypairs, however, this is a very low-stake game where I'm not overly worried about people losing it. Additionally, if they were to clear their cache, a new Player Wallet would be assigned to them. I def think the UX improvement outranks the game's security concerns.
+
+Like I said before, all of the frontend files are hosted on shadowdrive using shadow.storage. You can see the relevant files [here](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/asset-manifest.json)
+
+And since I wanted to make this a truly perma-dApp, I allowed the ability to provide your own Mainnet RPC url as a parameter ( see above on how-to ).
+
+Lastly, minus the keypairs, the entire project is open source - free forever. I hope some people get to play it, and more hopefully, people can copy it, make it better and learn from it!
 
 ## Keys
 - Game Program Key: `67714KFVqCYNTu7NUCjtMuid55dKutnXmjXpeqJEwmpu`
@@ -36,9 +50,13 @@ For Example:
 - Public Game Mint: `5q41Qpy4HtEtUfWBHBxmVEjg3DCdJ8wgdoLkNmEGm1vY`
 
 ## Notes
+- Desktop only, mobile looks terrible
 - The "Player" keypair is kept in local storage - This is ***UNSAFE*** please do not put anything valuable in it. The only thing Player Keypair does is sign for the `Click` and `Upgrade` function. This was done so you don't have to approve each click.
+- Clearing your browsers cache will generate you a new Player Keypair, so make sure you always withdraw or submit after a session!
 - Submitting to the leaderboard is the only real objective of the game
 - All sound effects are royalty-free and can be found at Pixabay.com - [composite sound file](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/clicker-sounds.mp3)
 - I own all of the NFTs present in the game ( although, I re-uploaded all of the artwork on shdw to keep everything together)
+- The game's maths ( costs/upgrades ) are almost directly copied from [Cookie Clicker](https://orteil.dashnet.org/cookieclicker/)
+- Everything else is of my creation!
   
 
