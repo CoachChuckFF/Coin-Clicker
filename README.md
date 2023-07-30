@@ -6,7 +6,8 @@ Click the coin, buy the upgrades, and get yourself on the Leaderboard!
 
 1. Click 'Deposit 0.01' to load your Player Wallet so it can click on your behalf
 2. Click the coin! Buy the upgrades!
-3a. Withdraw your Coins to your wallet -- OR --
+3a. Withdraw your Coins to your wallet 
+-- OR --
 3b. Submit your Coins to the leaderboard ( will reset your account )
 
 Have Fun!
