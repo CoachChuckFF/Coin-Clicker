@@ -100,10 +100,19 @@ function GamePage() {
 
     // ----------- ENABLED ------------------------
     const depositEnabled = !isLoading && gameAccount !== null;
-    const withdrawEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
+    const withdrawEnabled = !isLoading && gameAccount !== null && clickerAccount !== null && clickerAccount.points.toNumber() > 0;
     const clickEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
     const upgradeEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
-    const submitEnabled = !isLoading && gameAccount !== null && clickerAccount !== null;
+    const submitEnabled = !isLoading && gameAccount !== null && clickerAccount !== null && clickerAccount.points.toNumber() > 0;
+
+    // ----------- COINS FOR CONFETTI ------------------------
+    let coinsForConfetti = 0;
+    if(clickerAccount){
+        coinsForConfetti = clickerAccount.points.toNumber();
+    }
+    if(tokenBalance){
+        coinsForConfetti += tokenBalance;
+    }
 
     // ----------- FUNCTIONS ------------------------
 
@@ -324,14 +333,19 @@ function GamePage() {
             <div className="font-mono bg-solana-black text-solana-light rounded shadow p-4 h-full overflow-auto">
                 <h1 data-tooltip-id={TooltipIds.leaderboard} className="text-2xl font-bold mb-2 text-center">LEADERBOARD</h1>
                 <div>
-                    {leaderboardEntries.map((player, index) => (
-                        <div key={index} className="flex justify-between">
-                            <span>
-                                {index + 1}. {player.name}
-                            </span>
-                            <span>{player.coins}</span>
-                        </div>
-                    ))}
+                {leaderboardEntries.map((player, index) => (
+    <div key={index} className="flex justify-between">
+        <div className="flex">
+            <span style={{width: '30px', textAlign: 'left'}}>
+                {index + 1}.
+            </span>
+            <span style={{marginLeft: '10px'}}>
+                {player.name}
+            </span>
+        </div>
+        <span>{player.coins}</span>
+    </div>
+))}
                 </div>
             </div>
         );
@@ -351,11 +365,14 @@ function GamePage() {
     };
 
     // ----------- PAGE ------------------------
+
+
+
     return (
         <div className="font-mono w-screen h-screen flex text-solana-light -z-20">
             {renderSocials()}
             <Tooltips shouldShow={!isLoading}/>
-            <ConfettiArea coins={(clickerAccount ? clickerAccount.points.toNumber() : 0)}/>
+            <ConfettiArea coins={coinsForConfetti}/>
 
             <div className="w-1/3 h-full flex items-center justify-center p-8 flex-col">{renderClickerSection()}</div>
             <div className="w-2/3 h-full flex flex-col p-4">
