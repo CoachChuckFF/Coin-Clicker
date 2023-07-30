@@ -15,6 +15,10 @@ Have Fun!
 [Youtube Demo](https://youtu.be/6OQ_vJ0p3pA)
 [Video Demo Download](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/clicker-demo.mp4)
 
+## Lore
+
+It's Winter 2021, Solana is at an ATH of $260 and literally anything that came out made money. NFTs were all the craze and I was going to get into it. But, I was never a trader, so I started my Solana development career. I made my first game, completely on-chain called Sol-Treasure - a puzzle game. I presented it at the Miami Hackerhouse. It's been over a year and a half since then. I've traveled all over, met a lot of wonderful people, and built some really cool things. This clicker game, is a little memento for me, to show me how far I've come. The NFTs present, I still own, and serve as a great reminder of my wonderful experience developing in the Solana ecosystem. I sincerely hope you enjoy.
+
 ## General Info
 
 Hey there! Here is the Coin Clicker Solana game! It is basically Solana's version of [Cookie Clicker](https://orteil.dashnet.org/cookieclicker/) that I made for the [Solana Speedrun Gamejam](https://solanaspeedrun.com/)
