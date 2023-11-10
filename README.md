@@ -12,9 +12,10 @@ Click the coin, buy the upgrades, and get yourself on the Leaderboard!
 
 Have Fun!
 ❤️ Coach Chuck
-[coinclicker.xyz](Play here: coinclicker.xyz)
-[Youtube Demo](https://youtu.be/J0gFV-dytkU)
-[Video Demo Download](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/clicker-demo.mov)
+
+- [coinclicker.xyz](Play here: coinclicker.xyz)
+- [Youtube Demo](https://youtu.be/J0gFV-dytkU)
+- [Video Demo Download](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/clicker-demo.mov)
 
 ## Lore
 
