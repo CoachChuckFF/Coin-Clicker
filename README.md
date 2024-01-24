@@ -13,7 +13,7 @@ Click the coin, buy the upgrades, and get yourself on the Leaderboard!
 Have Fun!
 ❤️ Coach Chuck
 
-- [Play @ coinclicker.xyz](coinclicker.xyz)
+- [Play @ coinclicker.xyz](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html)
 - [Youtube Demo](https://youtu.be/J0gFV-dytkU)
 - [Video Demo Download](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/clicker-demo.mov)
 
@@ -29,7 +29,7 @@ I am entering in the Fully On-Chain category!
 
 And when I say *Fully* On-Chain, I mean it! Backend is written in Solana, Frontend is stored on ShadowDrive, and you can optionally provide your own RPC! - It's truly a perma-dapp!
 
-Go play it now! [HERE](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html) or [coinclicker.xyz](coinclicker.xyz)
+Go play it now! [HERE](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html) or [coinclicker.xyz](https://shdw-drive.genesysgo.net/5WRCJEgy7c1Wy3ewWdfJcAePMCaUq4asyuP8sRgTQZYq/index.html)
 
 If you want to provide your own mainnet RPC; just add in the `?rpc=` with your [encoded](https://www.urlencoder.org/) mainnet rpc url!
 
